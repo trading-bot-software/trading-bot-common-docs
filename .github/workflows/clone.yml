@@ -13,6 +13,8 @@ jobs:
           repository: trading-bot-software/trading-bot-common
           ref: gh-pages
           token: ${{ secrets.PAT_TOKEN }}
+      - name: Echo
+        run: ls
       
       - name: Deploy Documentation
         uses: s0/git-publish-subdir-action@develop
