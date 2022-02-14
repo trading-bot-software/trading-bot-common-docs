@@ -23,171 +23,6 @@
 </header>
 <section id="section-intro">
 <p>Read/Write data to file or database.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Read/Write data to file or database.
-&#34;&#34;&#34;
-
-
-from json import load, dump
-import os
-from os import getenv
-import pandas as pd
-from typing import Dict, List
-from pandas import DataFrame
-from pymongo import MongoClient
-from bson.objectid import ObjectId
-import psycopg2
-
-
-def load_from_json_file(path: str, filename: str) -&gt; Dict:
-    &#34;&#34;&#34;
-    Loads the json data from the file.
-    &#34;&#34;&#34;
-    os.makedirs(path, exist_ok=True)
-    with open(&#34;{}/{}&#34;.format(path, filename)) as file:
-        return load(file)
-
-
-def save_to_json_file(path: str, filename: str, config: Dict):
-    &#34;&#34;&#34;
-    Updates the json data in the file.
-    &#34;&#34;&#34;
-
-    os.makedirs(path, exist_ok=True)
-    with open(&#34;{}/{}&#34;.format(path, filename), &#34;w&#34;) as file:
-        dump(config, file, indent=4)
-
-
-def load_from_csv_file(path: str, filename: str, parse_dates: List[str]) -&gt; DataFrame:
-    &#34;&#34;&#34;
-    Loads the DataFrame from the file.
-    &#34;&#34;&#34;
-    os.makedirs(path, exist_ok=True)
-    if os.path.isfile(&#34;{}/{}&#34;.format(path, filename)):
-        df = pd.read_csv(
-            &#34;{}/{}&#34;.format(path, filename), index_col=[0], parse_dates=parse_dates
-        )
-    else:
-        df = pd.DataFrame()
-    return df
-
-
-def save_to_csv_file(path: str, filename: str, df: DataFrame):
-    &#34;&#34;&#34;
-    Updates the DataFrame in the file.
-    &#34;&#34;&#34;
-    os.makedirs(path, exist_ok=True)
-    with open(&#34;{}/{}&#34;.format(path, filename), &#34;w+&#34;) as outfile:
-        df.to_csv(outfile, line_terminator=&#34;\n&#34;)
-
-
-class Database:
-    &#34;&#34;&#34;
-    Read/Write data to file or database.
-    &#34;&#34;&#34;
-
-    BOT_TABLE = &#34;bot&#34;
-
-    POSTGRE_CREATE_QUERY = &#34;&#34;&#34;CREATE TABLE IF NOT EXISTS config
-    (&#34;id&#34; TEXT PRIMARY KEY NOT NULL,
-    {}
-    );
-    &#34;&#34;&#34;
-
-    def __init__(
-        self, mongo_db: str = None, postgre_db: str = None, database: str = None
-    ):
-        &#34;&#34;&#34;
-        Initializes the reader.
-        Send either mongo or postrgre connection.
-        Database is needed only for mongo one.
-        &#34;&#34;&#34;
-
-        self.mongo_db = mongo_db
-        self.postgre_db = postgre_db
-        self.database = database
-        if mongo_db is not None:
-            self.client = MongoClient(mongo_db)
-        elif postgre_db is not None:
-            self.client = psycopg2.connect(postgre_db)
-
-    def _insert_empty_mongo(self, table: str, id: str):
-        self.client[self.database][table].insert_one({&#34;_id&#34;: ObjectId(id)})
-
-    def _postgre_execute(self, query, vars=None):
-        cursor = self.client.cursor()
-        cursor.execute(query, vars)
-        cursor.close()
-        self.client.commit()
-
-    def _postgre_execute_and_fetch(self, query, vars=None):
-        cursor = self.client.cursor()
-        cursor.execute(query, vars)
-        column_names = [desc[0] for desc in cursor.description]
-        column_values = cursor.fetchone()
-        cursor.close()
-        result = {}
-        for i, val in enumerate(column_values):
-            result[column_names[i]] = val
-        return result
-
-    def _insert_empty_postgre(self, table: str, id: str, types: str):
-        sql = &#34;INSERT INTO {} (id) VALUES(%s) ON CONFLICT DO NOTHING;&#34;.format(table)
-        self._postgre_execute(Database.POSTGRE_CREATE_QUERY.format(types))
-        self._postgre_execute(sql, (id,))
-
-    def _insert_empty(self, table: str, id: str, types: str = None):
-        if self.mongo_db is not None:
-            self._insert_empty_mongo(table, id)
-        elif self.postgre_db is not None:
-            self._insert_empty_postgre(table, id, types)
-
-    def _load_from_db_mongo(self, table: str, id: str):
-        config = self.client[self.database][table].find_one({&#34;_id&#34;: ObjectId(id)})
-        del config[&#34;_id&#34;]
-        return config
-
-    def _load_from_db_postgre(self, table: str, id: str):
-        sql = &#34;SELECT * FROM {} WHERE id=(%s);&#34;.format(table)
-        config = self._postgre_execute_and_fetch(sql, (id,))
-        del config[&#34;id&#34;]
-        return config
-
-    def load_from_db(self, table: str, id: str):
-        &#34;&#34;&#34;
-        Gets the data from the database.
-        &#34;&#34;&#34;
-        if self.mongo_db is not None:
-            return self._load_from_db_mongo(table, id)
-        elif self.postgre_db is not None:
-            return self._load_from_db_postgre(table, id)
-
-    def _save_to_db_mongo(self, table: str, id: str, key: str, value: str):
-        return (
-            self.client[self.database][table]
-            .update_one({&#34;_id&#34;: ObjectId(id)}, {&#34;$set&#34;: {key: value}})
-            .modified_count
-        )
-
-    def _save_to_db_postgre(self, table: str, id: str, key: str, value: str):
-        sql = &#34;UPDATE {} SET {}=(%s) WHERE id=(%s);&#34;.format(table, key)
-        self._postgre_execute(sql, (value, id))
-        return 1
-
-    def save_to_db(self, table: str, id: str, key: str, value: str):
-        &#34;&#34;&#34;
-        Saves the data to the database.
-        &#34;&#34;&#34;
-
-        if self.mongo_db is not None:
-            return self._save_to_db_mongo(table, id, key, value)
-        elif self.postgre_db is not None:
-            return self._save_to_db_postgre(table, id, key, value)</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -201,78 +36,24 @@ class Database:
 </code></dt>
 <dd>
 <div class="desc"><p>Loads the DataFrame from the file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def load_from_csv_file(path: str, filename: str, parse_dates: List[str]) -&gt; DataFrame:
-    &#34;&#34;&#34;
-    Loads the DataFrame from the file.
-    &#34;&#34;&#34;
-    os.makedirs(path, exist_ok=True)
-    if os.path.isfile(&#34;{}/{}&#34;.format(path, filename)):
-        df = pd.read_csv(
-            &#34;{}/{}&#34;.format(path, filename), index_col=[0], parse_dates=parse_dates
-        )
-    else:
-        df = pd.DataFrame()
-    return df</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.database.load_from_json_file"><code class="name flex">
 <span>def <span class="ident">load_from_json_file</span></span>(<span>path: str, filename: str) ‑> Dict</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Loads the json data from the file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def load_from_json_file(path: str, filename: str) -&gt; Dict:
-    &#34;&#34;&#34;
-    Loads the json data from the file.
-    &#34;&#34;&#34;
-    os.makedirs(path, exist_ok=True)
-    with open(&#34;{}/{}&#34;.format(path, filename)) as file:
-        return load(file)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.database.save_to_csv_file"><code class="name flex">
 <span>def <span class="ident">save_to_csv_file</span></span>(<span>path: str, filename: str, df: pandas.core.frame.DataFrame)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Updates the DataFrame in the file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_to_csv_file(path: str, filename: str, df: DataFrame):
-    &#34;&#34;&#34;
-    Updates the DataFrame in the file.
-    &#34;&#34;&#34;
-    os.makedirs(path, exist_ok=True)
-    with open(&#34;{}/{}&#34;.format(path, filename), &#34;w+&#34;) as outfile:
-        df.to_csv(outfile, line_terminator=&#34;\n&#34;)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.database.save_to_json_file"><code class="name flex">
 <span>def <span class="ident">save_to_json_file</span></span>(<span>path: str, filename: str, config: Dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Updates the json data in the file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_to_json_file(path: str, filename: str, config: Dict):
-    &#34;&#34;&#34;
-    Updates the json data in the file.
-    &#34;&#34;&#34;
-
-    os.makedirs(path, exist_ok=True)
-    with open(&#34;{}/{}&#34;.format(path, filename), &#34;w&#34;) as file:
-        dump(config, file, indent=4)</code></pre>
-</details>
 </dd>
 </dl>
 </section>
@@ -288,113 +69,6 @@ class Database:
 <p>Initializes the reader.
 Send either mongo or postrgre connection.
 Database is needed only for mongo one.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Database:
-    &#34;&#34;&#34;
-    Read/Write data to file or database.
-    &#34;&#34;&#34;
-
-    BOT_TABLE = &#34;bot&#34;
-
-    POSTGRE_CREATE_QUERY = &#34;&#34;&#34;CREATE TABLE IF NOT EXISTS config
-    (&#34;id&#34; TEXT PRIMARY KEY NOT NULL,
-    {}
-    );
-    &#34;&#34;&#34;
-
-    def __init__(
-        self, mongo_db: str = None, postgre_db: str = None, database: str = None
-    ):
-        &#34;&#34;&#34;
-        Initializes the reader.
-        Send either mongo or postrgre connection.
-        Database is needed only for mongo one.
-        &#34;&#34;&#34;
-
-        self.mongo_db = mongo_db
-        self.postgre_db = postgre_db
-        self.database = database
-        if mongo_db is not None:
-            self.client = MongoClient(mongo_db)
-        elif postgre_db is not None:
-            self.client = psycopg2.connect(postgre_db)
-
-    def _insert_empty_mongo(self, table: str, id: str):
-        self.client[self.database][table].insert_one({&#34;_id&#34;: ObjectId(id)})
-
-    def _postgre_execute(self, query, vars=None):
-        cursor = self.client.cursor()
-        cursor.execute(query, vars)
-        cursor.close()
-        self.client.commit()
-
-    def _postgre_execute_and_fetch(self, query, vars=None):
-        cursor = self.client.cursor()
-        cursor.execute(query, vars)
-        column_names = [desc[0] for desc in cursor.description]
-        column_values = cursor.fetchone()
-        cursor.close()
-        result = {}
-        for i, val in enumerate(column_values):
-            result[column_names[i]] = val
-        return result
-
-    def _insert_empty_postgre(self, table: str, id: str, types: str):
-        sql = &#34;INSERT INTO {} (id) VALUES(%s) ON CONFLICT DO NOTHING;&#34;.format(table)
-        self._postgre_execute(Database.POSTGRE_CREATE_QUERY.format(types))
-        self._postgre_execute(sql, (id,))
-
-    def _insert_empty(self, table: str, id: str, types: str = None):
-        if self.mongo_db is not None:
-            self._insert_empty_mongo(table, id)
-        elif self.postgre_db is not None:
-            self._insert_empty_postgre(table, id, types)
-
-    def _load_from_db_mongo(self, table: str, id: str):
-        config = self.client[self.database][table].find_one({&#34;_id&#34;: ObjectId(id)})
-        del config[&#34;_id&#34;]
-        return config
-
-    def _load_from_db_postgre(self, table: str, id: str):
-        sql = &#34;SELECT * FROM {} WHERE id=(%s);&#34;.format(table)
-        config = self._postgre_execute_and_fetch(sql, (id,))
-        del config[&#34;id&#34;]
-        return config
-
-    def load_from_db(self, table: str, id: str):
-        &#34;&#34;&#34;
-        Gets the data from the database.
-        &#34;&#34;&#34;
-        if self.mongo_db is not None:
-            return self._load_from_db_mongo(table, id)
-        elif self.postgre_db is not None:
-            return self._load_from_db_postgre(table, id)
-
-    def _save_to_db_mongo(self, table: str, id: str, key: str, value: str):
-        return (
-            self.client[self.database][table]
-            .update_one({&#34;_id&#34;: ObjectId(id)}, {&#34;$set&#34;: {key: value}})
-            .modified_count
-        )
-
-    def _save_to_db_postgre(self, table: str, id: str, key: str, value: str):
-        sql = &#34;UPDATE {} SET {}=(%s) WHERE id=(%s);&#34;.format(table, key)
-        self._postgre_execute(sql, (value, id))
-        return 1
-
-    def save_to_db(self, table: str, id: str, key: str, value: str):
-        &#34;&#34;&#34;
-        Saves the data to the database.
-        &#34;&#34;&#34;
-
-        if self.mongo_db is not None:
-            return self._save_to_db_mongo(table, id, key, value)
-        elif self.postgre_db is not None:
-            return self._save_to_db_postgre(table, id, key, value)</code></pre>
-</details>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="trading_bot_common.config_database.ConfigDatabase" href="config_database.html#trading_bot_common.config_database.ConfigDatabase">ConfigDatabase</a></li>
@@ -417,39 +91,12 @@ Database is needed only for mongo one.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the data from the database.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def load_from_db(self, table: str, id: str):
-    &#34;&#34;&#34;
-    Gets the data from the database.
-    &#34;&#34;&#34;
-    if self.mongo_db is not None:
-        return self._load_from_db_mongo(table, id)
-    elif self.postgre_db is not None:
-        return self._load_from_db_postgre(table, id)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.database.Database.save_to_db"><code class="name flex">
 <span>def <span class="ident">save_to_db</span></span>(<span>self, table: str, id: str, key: str, value: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Saves the data to the database.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_to_db(self, table: str, id: str, key: str, value: str):
-    &#34;&#34;&#34;
-    Saves the data to the database.
-    &#34;&#34;&#34;
-
-    if self.mongo_db is not None:
-        return self._save_to_db_mongo(table, id, key, value)
-    elif self.postgre_db is not None:
-        return self._save_to_db_postgre(table, id, key, value)</code></pre>
-</details>
 </dd>
 </dl>
 </dd>

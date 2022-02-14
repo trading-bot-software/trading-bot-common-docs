@@ -23,186 +23,6 @@
 </header>
 <section id="section-intro">
 <p>Actions used in backtesting. Contains wallet checking and order execution.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Actions used in backtesting. Contains wallet checking and order execution.
-&#34;&#34;&#34;
-
-from typing import Dict, List
-from trading_bot_common.logger import Logger
-from trading_bot_common.model.logger_messages import LoggerMessages
-from trading_bot_common.model.config import ConfigNames
-from trading_bot_common.model.trade import TradeSide
-from trading_bot_common.model.assets import WalletState
-
-
-class BacktestActions:
-    &#34;&#34;&#34;
-    Actions used in backtesting. Contains wallet checking and order execution.
-    &#34;&#34;&#34;
-
-    def __init__(self, config: Dict, logger: Logger):
-        self.config = config
-        self.logger = logger
-        self.stablecoin = self.config[ConfigNames.STABLE_COIN]
-        self.orders = {}
-
-    def get_fee(self, pair):
-        &#34;&#34;&#34;
-        Get fee for a pair. Used when buying and selling.
-        &#34;&#34;&#34;
-
-        return 0.0002
-
-    def get_ballance(self, expected_wallet: float = 0) -&gt; Dict:
-        &#34;&#34;&#34;
-        Get ballance of used, free and total.
-        &#34;&#34;&#34;
-
-        result = {self.stablecoin: {}}
-        result[self.stablecoin][WalletState.FREE] = expected_wallet
-        result[self.stablecoin][WalletState.USED] = 0  # Unused in backtest
-        result[self.stablecoin][WalletState.TOTAL] = 0  # Unused in backtest
-        for pair in self.config[ConfigNames.PAIRS]:
-            result[pair] = {}
-            result[pair][WalletState.FREE] = 0  # Unused in backtest
-            result[pair][WalletState.USED] = 0  # Unused in backtest
-            result[pair][WalletState.TOTAL] = 0  # Unused in backtest
-        return result
-
-    def get_open_orders(self, pair) -&gt; List[object]:
-        &#34;&#34;&#34;
-        Get open orders for a pair.
-        &#34;&#34;&#34;
-        if pair not in self.orders:
-            self.orders[pair] = []
-        return self.orders[pair]
-
-    def cancel_orders(self, pair, orders) -&gt; None:
-        &#34;&#34;&#34;
-        Cancel all open orders for a pair.
-        &#34;&#34;&#34;
-        if pair in self.orders:
-            del self.orders[pair]
-        if not self.config[ConfigNames.BACKTEST]:
-            return
-        self.logger.print_info(LoggerMessages.CANCEL_START.format(pair))
-        self.logger.print_info(
-            LoggerMessages.CANCEL_END.format(pair), send_telegram=True
-        )
-
-    def set_limit_order(
-        self, pair: str, side: str, amount: float, price: float
-    ) -&gt; None:
-        &#34;&#34;&#34;
-        Set a limit order.
-        &#34;&#34;&#34;
-        if not self.config[ConfigNames.BACKTEST]:
-            return
-        self.logger.print_info(
-            LoggerMessages.LIMIT_ORDER_START.format(pair, price, amount),
-        )
-        self.logger.print_info(
-            LoggerMessages.LIMIT_ORDER_END.format(pair), send_telegram=True
-        )
-
-    def set_stop_limit_order(
-        self, pair: str, side: str, amount: float, price: float, stop_price: float
-    ) -&gt; bool:
-        &#34;&#34;&#34;
-        Set a stop limit order.
-        &#34;&#34;&#34;
-        if pair not in self.orders:
-            pairList = []
-        else:
-            pairList: List = self.orders[pair]
-        pairList.append(side)
-        self.orders[pair] = pairList
-        if not self.config[ConfigNames.BACKTEST]:
-            return True
-        self.logger.print_info(
-            LoggerMessages.STOP_LIMIT_ORDER_START.format(pair, price, amount)
-        )
-        self.logger.print_info(
-            LoggerMessages.STOP_LIMIT_ORDER_END.format(pair), send_telegram=True
-        )
-        return True
-
-    def set_oco_limit_order(
-        self,
-        pair: str,
-        side: str,
-        amount: float,
-        stop_loss: float,
-        stop_loss_limit: float,
-        take_profit: float,
-    ) -&gt; bool:
-        &#34;&#34;&#34;
-        Set an OCO limit order.
-        &#34;&#34;&#34;
-        if pair not in self.orders:
-            pairList = []
-        else:
-            pairList: List = self.orders[pair]
-        pairList.append(side)
-        self.orders[pair] = pairList
-        if not self.config[ConfigNames.BACKTEST]:
-            return
-        self.logger.print_info(
-            LoggerMessages.OCO_ORDER_START.format(pair, take_profit, stop_loss, amount)
-        )
-        self.logger.print_info(
-            LoggerMessages.OCO_ORDER_END.format(pair), send_telegram=True
-        )
-
-    def edit_take_profit_order(
-        self,
-        pair: str,
-        side: str,
-        amount: float,
-        stop_loss: float,
-        stop_loss_limit: float,
-        take_profit: float,
-        orders: List,
-    ) -&gt; None:
-        &#34;&#34;&#34;
-        Edit a take profit order.
-        &#34;&#34;&#34;
-        pass
-
-    def should_end_stop_limit_buy_order(
-        self, pair: str, limit_price: float, stop_price: float, high: float, low: float
-    ) -&gt; bool:
-        &#34;&#34;&#34;
-        Check if a stop limit buy order should be ended.
-        &#34;&#34;&#34;
-        order_over = high &gt;= limit_price and low &lt;= limit_price
-        if order_over:
-            del self.orders[pair]
-        return order_over
-
-    def should_end_oco_order(
-        self,
-        pair: str,
-        side: str,
-        take_profit: float,
-        stop_loss: float,
-        high: float,
-        low: float,
-    ) -&gt; bool:
-        &#34;&#34;&#34;
-        Check if an OCO order should be ended.
-        &#34;&#34;&#34;
-        order_over = low &lt; stop_loss or high &gt; take_profit
-        if side == TradeSide.SELL:
-            order_over = high &lt; stop_loss or low &gt; take_profit
-        if order_over:
-            del self.orders[pair]
-        return order_over</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -219,174 +39,6 @@ class BacktestActions:
 </code></dt>
 <dd>
 <div class="desc"><p>Actions used in backtesting. Contains wallet checking and order execution.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class BacktestActions:
-    &#34;&#34;&#34;
-    Actions used in backtesting. Contains wallet checking and order execution.
-    &#34;&#34;&#34;
-
-    def __init__(self, config: Dict, logger: Logger):
-        self.config = config
-        self.logger = logger
-        self.stablecoin = self.config[ConfigNames.STABLE_COIN]
-        self.orders = {}
-
-    def get_fee(self, pair):
-        &#34;&#34;&#34;
-        Get fee for a pair. Used when buying and selling.
-        &#34;&#34;&#34;
-
-        return 0.0002
-
-    def get_ballance(self, expected_wallet: float = 0) -&gt; Dict:
-        &#34;&#34;&#34;
-        Get ballance of used, free and total.
-        &#34;&#34;&#34;
-
-        result = {self.stablecoin: {}}
-        result[self.stablecoin][WalletState.FREE] = expected_wallet
-        result[self.stablecoin][WalletState.USED] = 0  # Unused in backtest
-        result[self.stablecoin][WalletState.TOTAL] = 0  # Unused in backtest
-        for pair in self.config[ConfigNames.PAIRS]:
-            result[pair] = {}
-            result[pair][WalletState.FREE] = 0  # Unused in backtest
-            result[pair][WalletState.USED] = 0  # Unused in backtest
-            result[pair][WalletState.TOTAL] = 0  # Unused in backtest
-        return result
-
-    def get_open_orders(self, pair) -&gt; List[object]:
-        &#34;&#34;&#34;
-        Get open orders for a pair.
-        &#34;&#34;&#34;
-        if pair not in self.orders:
-            self.orders[pair] = []
-        return self.orders[pair]
-
-    def cancel_orders(self, pair, orders) -&gt; None:
-        &#34;&#34;&#34;
-        Cancel all open orders for a pair.
-        &#34;&#34;&#34;
-        if pair in self.orders:
-            del self.orders[pair]
-        if not self.config[ConfigNames.BACKTEST]:
-            return
-        self.logger.print_info(LoggerMessages.CANCEL_START.format(pair))
-        self.logger.print_info(
-            LoggerMessages.CANCEL_END.format(pair), send_telegram=True
-        )
-
-    def set_limit_order(
-        self, pair: str, side: str, amount: float, price: float
-    ) -&gt; None:
-        &#34;&#34;&#34;
-        Set a limit order.
-        &#34;&#34;&#34;
-        if not self.config[ConfigNames.BACKTEST]:
-            return
-        self.logger.print_info(
-            LoggerMessages.LIMIT_ORDER_START.format(pair, price, amount),
-        )
-        self.logger.print_info(
-            LoggerMessages.LIMIT_ORDER_END.format(pair), send_telegram=True
-        )
-
-    def set_stop_limit_order(
-        self, pair: str, side: str, amount: float, price: float, stop_price: float
-    ) -&gt; bool:
-        &#34;&#34;&#34;
-        Set a stop limit order.
-        &#34;&#34;&#34;
-        if pair not in self.orders:
-            pairList = []
-        else:
-            pairList: List = self.orders[pair]
-        pairList.append(side)
-        self.orders[pair] = pairList
-        if not self.config[ConfigNames.BACKTEST]:
-            return True
-        self.logger.print_info(
-            LoggerMessages.STOP_LIMIT_ORDER_START.format(pair, price, amount)
-        )
-        self.logger.print_info(
-            LoggerMessages.STOP_LIMIT_ORDER_END.format(pair), send_telegram=True
-        )
-        return True
-
-    def set_oco_limit_order(
-        self,
-        pair: str,
-        side: str,
-        amount: float,
-        stop_loss: float,
-        stop_loss_limit: float,
-        take_profit: float,
-    ) -&gt; bool:
-        &#34;&#34;&#34;
-        Set an OCO limit order.
-        &#34;&#34;&#34;
-        if pair not in self.orders:
-            pairList = []
-        else:
-            pairList: List = self.orders[pair]
-        pairList.append(side)
-        self.orders[pair] = pairList
-        if not self.config[ConfigNames.BACKTEST]:
-            return
-        self.logger.print_info(
-            LoggerMessages.OCO_ORDER_START.format(pair, take_profit, stop_loss, amount)
-        )
-        self.logger.print_info(
-            LoggerMessages.OCO_ORDER_END.format(pair), send_telegram=True
-        )
-
-    def edit_take_profit_order(
-        self,
-        pair: str,
-        side: str,
-        amount: float,
-        stop_loss: float,
-        stop_loss_limit: float,
-        take_profit: float,
-        orders: List,
-    ) -&gt; None:
-        &#34;&#34;&#34;
-        Edit a take profit order.
-        &#34;&#34;&#34;
-        pass
-
-    def should_end_stop_limit_buy_order(
-        self, pair: str, limit_price: float, stop_price: float, high: float, low: float
-    ) -&gt; bool:
-        &#34;&#34;&#34;
-        Check if a stop limit buy order should be ended.
-        &#34;&#34;&#34;
-        order_over = high &gt;= limit_price and low &lt;= limit_price
-        if order_over:
-            del self.orders[pair]
-        return order_over
-
-    def should_end_oco_order(
-        self,
-        pair: str,
-        side: str,
-        take_profit: float,
-        stop_loss: float,
-        high: float,
-        low: float,
-    ) -&gt; bool:
-        &#34;&#34;&#34;
-        Check if an OCO order should be ended.
-        &#34;&#34;&#34;
-        order_over = low &lt; stop_loss or high &gt; take_profit
-        if side == TradeSide.SELL:
-            order_over = high &lt; stop_loss or low &gt; take_profit
-        if order_over:
-            del self.orders[pair]
-        return order_over</code></pre>
-</details>
 <h3>Methods</h3>
 <dl>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.cancel_orders"><code class="name flex">
@@ -394,253 +46,60 @@ class BacktestActions:
 </code></dt>
 <dd>
 <div class="desc"><p>Cancel all open orders for a pair.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def cancel_orders(self, pair, orders) -&gt; None:
-    &#34;&#34;&#34;
-    Cancel all open orders for a pair.
-    &#34;&#34;&#34;
-    if pair in self.orders:
-        del self.orders[pair]
-    if not self.config[ConfigNames.BACKTEST]:
-        return
-    self.logger.print_info(LoggerMessages.CANCEL_START.format(pair))
-    self.logger.print_info(
-        LoggerMessages.CANCEL_END.format(pair), send_telegram=True
-    )</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.edit_take_profit_order"><code class="name flex">
 <span>def <span class="ident">edit_take_profit_order</span></span>(<span>self, pair: str, side: str, amount: float, stop_loss: float, stop_loss_limit: float, take_profit: float, orders: List) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Edit a take profit order.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def edit_take_profit_order(
-    self,
-    pair: str,
-    side: str,
-    amount: float,
-    stop_loss: float,
-    stop_loss_limit: float,
-    take_profit: float,
-    orders: List,
-) -&gt; None:
-    &#34;&#34;&#34;
-    Edit a take profit order.
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.get_ballance"><code class="name flex">
 <span>def <span class="ident">get_ballance</span></span>(<span>self, expected_wallet: float = 0) ‑> Dict</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get ballance of used, free and total.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_ballance(self, expected_wallet: float = 0) -&gt; Dict:
-    &#34;&#34;&#34;
-    Get ballance of used, free and total.
-    &#34;&#34;&#34;
-
-    result = {self.stablecoin: {}}
-    result[self.stablecoin][WalletState.FREE] = expected_wallet
-    result[self.stablecoin][WalletState.USED] = 0  # Unused in backtest
-    result[self.stablecoin][WalletState.TOTAL] = 0  # Unused in backtest
-    for pair in self.config[ConfigNames.PAIRS]:
-        result[pair] = {}
-        result[pair][WalletState.FREE] = 0  # Unused in backtest
-        result[pair][WalletState.USED] = 0  # Unused in backtest
-        result[pair][WalletState.TOTAL] = 0  # Unused in backtest
-    return result</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.get_fee"><code class="name flex">
 <span>def <span class="ident">get_fee</span></span>(<span>self, pair)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get fee for a pair. Used when buying and selling.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_fee(self, pair):
-    &#34;&#34;&#34;
-    Get fee for a pair. Used when buying and selling.
-    &#34;&#34;&#34;
-
-    return 0.0002</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.get_open_orders"><code class="name flex">
 <span>def <span class="ident">get_open_orders</span></span>(<span>self, pair) ‑> List[object]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get open orders for a pair.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_open_orders(self, pair) -&gt; List[object]:
-    &#34;&#34;&#34;
-    Get open orders for a pair.
-    &#34;&#34;&#34;
-    if pair not in self.orders:
-        self.orders[pair] = []
-    return self.orders[pair]</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.set_limit_order"><code class="name flex">
 <span>def <span class="ident">set_limit_order</span></span>(<span>self, pair: str, side: str, amount: float, price: float) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a limit order.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def set_limit_order(
-    self, pair: str, side: str, amount: float, price: float
-) -&gt; None:
-    &#34;&#34;&#34;
-    Set a limit order.
-    &#34;&#34;&#34;
-    if not self.config[ConfigNames.BACKTEST]:
-        return
-    self.logger.print_info(
-        LoggerMessages.LIMIT_ORDER_START.format(pair, price, amount),
-    )
-    self.logger.print_info(
-        LoggerMessages.LIMIT_ORDER_END.format(pair), send_telegram=True
-    )</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.set_oco_limit_order"><code class="name flex">
 <span>def <span class="ident">set_oco_limit_order</span></span>(<span>self, pair: str, side: str, amount: float, stop_loss: float, stop_loss_limit: float, take_profit: float) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set an OCO limit order.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def set_oco_limit_order(
-    self,
-    pair: str,
-    side: str,
-    amount: float,
-    stop_loss: float,
-    stop_loss_limit: float,
-    take_profit: float,
-) -&gt; bool:
-    &#34;&#34;&#34;
-    Set an OCO limit order.
-    &#34;&#34;&#34;
-    if pair not in self.orders:
-        pairList = []
-    else:
-        pairList: List = self.orders[pair]
-    pairList.append(side)
-    self.orders[pair] = pairList
-    if not self.config[ConfigNames.BACKTEST]:
-        return
-    self.logger.print_info(
-        LoggerMessages.OCO_ORDER_START.format(pair, take_profit, stop_loss, amount)
-    )
-    self.logger.print_info(
-        LoggerMessages.OCO_ORDER_END.format(pair), send_telegram=True
-    )</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.set_stop_limit_order"><code class="name flex">
 <span>def <span class="ident">set_stop_limit_order</span></span>(<span>self, pair: str, side: str, amount: float, price: float, stop_price: float) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a stop limit order.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def set_stop_limit_order(
-    self, pair: str, side: str, amount: float, price: float, stop_price: float
-) -&gt; bool:
-    &#34;&#34;&#34;
-    Set a stop limit order.
-    &#34;&#34;&#34;
-    if pair not in self.orders:
-        pairList = []
-    else:
-        pairList: List = self.orders[pair]
-    pairList.append(side)
-    self.orders[pair] = pairList
-    if not self.config[ConfigNames.BACKTEST]:
-        return True
-    self.logger.print_info(
-        LoggerMessages.STOP_LIMIT_ORDER_START.format(pair, price, amount)
-    )
-    self.logger.print_info(
-        LoggerMessages.STOP_LIMIT_ORDER_END.format(pair), send_telegram=True
-    )
-    return True</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.should_end_oco_order"><code class="name flex">
 <span>def <span class="ident">should_end_oco_order</span></span>(<span>self, pair: str, side: str, take_profit: float, stop_loss: float, high: float, low: float) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Check if an OCO order should be ended.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def should_end_oco_order(
-    self,
-    pair: str,
-    side: str,
-    take_profit: float,
-    stop_loss: float,
-    high: float,
-    low: float,
-) -&gt; bool:
-    &#34;&#34;&#34;
-    Check if an OCO order should be ended.
-    &#34;&#34;&#34;
-    order_over = low &lt; stop_loss or high &gt; take_profit
-    if side == TradeSide.SELL:
-        order_over = high &lt; stop_loss or low &gt; take_profit
-    if order_over:
-        del self.orders[pair]
-    return order_over</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.should_end_stop_limit_buy_order"><code class="name flex">
 <span>def <span class="ident">should_end_stop_limit_buy_order</span></span>(<span>self, pair: str, limit_price: float, stop_price: float, high: float, low: float) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Check if a stop limit buy order should be ended.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def should_end_stop_limit_buy_order(
-    self, pair: str, limit_price: float, stop_price: float, high: float, low: float
-) -&gt; bool:
-    &#34;&#34;&#34;
-    Check if a stop limit buy order should be ended.
-    &#34;&#34;&#34;
-    order_over = high &gt;= limit_price and low &lt;= limit_price
-    if order_over:
-        del self.orders[pair]
-    return order_over</code></pre>
-</details>
 </dd>
 </dl>
 </dd>

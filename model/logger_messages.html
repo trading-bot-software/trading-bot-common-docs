@@ -23,37 +23,6 @@
 </header>
 <section id="section-intro">
 <p>Logger messages used whithin whole app that are sent to user.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Logger messages used whithin whole app that are sent to user.
-&#34;&#34;&#34;
-
-
-class LoggerMessages(str):
-    &#34;&#34;&#34;
-    Possible messages to log.
-    &#34;&#34;&#34;
-
-    CANCEL_START = &#34;Executing CANCEL Trade for pair {}&#34;
-    CANCEL_END = &#34;Executing CANCEL Trade for pair {}&#34;
-
-    LIMIT_ORDER_START = &#34;Executing LIMIT Trade for pair {} | PR {} | AM {} |&#34;
-    LIMIT_ORDER_END = &#34;Executing LIMIT Trade for pair {}&#34;
-
-    STOP_LIMIT_ORDER_START = &#34;Executing STOP_LIMIT Trade for pair {} | PR {} | AM {} |&#34;
-    STOP_LIMIT_ORDER_END = &#34;Executing STOP_LIMIT Trade for pair {}&#34;
-
-    OCO_ORDER_START = &#34;Executing OCO Trade for pair {} | TP {} | SL {} | AM {} |&#34;
-    OCO_ORDER_END = &#34;Executing OCO Trade for pair {}&#34;
-
-    DOWNLOAD_DATA_START = &#34;Starting data download. {}&#34;
-    DOWNLOAD_DATA_END = &#34;Downloaded in total {} candles&#34;
-
-    CLOSE_TRADE = &#34;Executed CLOSE Trade for pair {}&#34;</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -70,32 +39,6 @@ class LoggerMessages(str):
 </code></dt>
 <dd>
 <div class="desc"><p>Possible messages to log.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class LoggerMessages(str):
-    &#34;&#34;&#34;
-    Possible messages to log.
-    &#34;&#34;&#34;
-
-    CANCEL_START = &#34;Executing CANCEL Trade for pair {}&#34;
-    CANCEL_END = &#34;Executing CANCEL Trade for pair {}&#34;
-
-    LIMIT_ORDER_START = &#34;Executing LIMIT Trade for pair {} | PR {} | AM {} |&#34;
-    LIMIT_ORDER_END = &#34;Executing LIMIT Trade for pair {}&#34;
-
-    STOP_LIMIT_ORDER_START = &#34;Executing STOP_LIMIT Trade for pair {} | PR {} | AM {} |&#34;
-    STOP_LIMIT_ORDER_END = &#34;Executing STOP_LIMIT Trade for pair {}&#34;
-
-    OCO_ORDER_START = &#34;Executing OCO Trade for pair {} | TP {} | SL {} | AM {} |&#34;
-    OCO_ORDER_END = &#34;Executing OCO Trade for pair {}&#34;
-
-    DOWNLOAD_DATA_START = &#34;Starting data download. {}&#34;
-    DOWNLOAD_DATA_END = &#34;Downloaded in total {} candles&#34;
-
-    CLOSE_TRADE = &#34;Executed CLOSE Trade for pair {}&#34;</code></pre>
-</details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>builtins.str</li>

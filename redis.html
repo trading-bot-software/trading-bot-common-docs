@@ -23,82 +23,6 @@
 </header>
 <section id="section-intro">
 <p>Used to synchronize the bot with api.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Used to synchronize the bot with api.
-&#34;&#34;&#34;
-
-from os import getenv
-from aioredis import from_url
-from aioredis.client import Redis
-from datetime import datetime
-
-
-def get_redis_connection_from_env(bot_id: str, redis_host_env: str = &#34;REDIS_HOST&#34;):
-    &#34;&#34;&#34;
-    Gets the redis connection from the environment var.
-    &#34;&#34;&#34;
-    if getenv(redis_host_env) is None:
-        raise Exception(&#34;{} not set&#34;.format(redis_host_env))
-    return RedisConnection(getenv(redis_host_env), bot_id)
-
-
-class RedisConnection:
-    &#34;&#34;&#34;
-    Used to synchronize the bot with api.
-    &#34;&#34;&#34;
-
-    def __init__(self, redis_host: str, bot_id: str) -&gt; Redis:
-        self.redis_async = from_url(
-            &#34;redis://&#34; + redis_host, encoding=&#34;utf-8&#34;, decode_responses=True
-        )
-        self.ps = self.redis_async.pubsub()
-        self.bot_id = bot_id
-
-    async def set(self, key: str, value: str):
-        &#34;&#34;&#34;
-        Sets the value of the given key.
-        &#34;&#34;&#34;
-        await self.redis_async.set(&#34;{}_{}&#34;.format(self.bot_id, key), value)
-
-    async def get(self, key: str):
-        &#34;&#34;&#34;
-        Gets the value of the given key.
-        &#34;&#34;&#34;
-        return await self.redis_async.get(&#34;{}_{}&#34;.format(self.bot_id, key))
-
-    def time_until_next_minute(self):
-        &#34;&#34;&#34;
-        Returns the time until the next minute.
-        &#34;&#34;&#34;
-        return 60 - datetime.utcnow().second
-
-    async def get_message(self, timeout: int):
-        &#34;&#34;&#34;
-        Gets the next message from the redis channel.
-        &#34;&#34;&#34;
-        message = await self.ps.get_message(
-            ignore_subscribe_messages=True, timeout=timeout
-        )
-        if message is not None:
-            return message[&#34;data&#34;]
-        return message
-
-    async def publish(self, channel: str, value: str):
-        &#34;&#34;&#34;
-        Notifies the listeners that something has changed.
-        &#34;&#34;&#34;
-        await self.redis_async.publish(&#34;{}_{}&#34;.format(self.bot_id, channel), value)
-
-    async def subscribe(self, channel: str):
-        &#34;&#34;&#34;
-        Subscribes to the redis channel.
-        &#34;&#34;&#34;
-        await self.ps.subscribe(&#34;{}_{}&#34;.format(self.bot_id, channel))</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -112,18 +36,6 @@ class RedisConnection:
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the redis connection from the environment var.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_redis_connection_from_env(bot_id: str, redis_host_env: str = &#34;REDIS_HOST&#34;):
-    &#34;&#34;&#34;
-    Gets the redis connection from the environment var.
-    &#34;&#34;&#34;
-    if getenv(redis_host_env) is None:
-        raise Exception(&#34;{} not set&#34;.format(redis_host_env))
-    return RedisConnection(getenv(redis_host_env), bot_id)</code></pre>
-</details>
 </dd>
 </dl>
 </section>
@@ -136,63 +48,6 @@ class RedisConnection:
 </code></dt>
 <dd>
 <div class="desc"><p>Used to synchronize the bot with api.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class RedisConnection:
-    &#34;&#34;&#34;
-    Used to synchronize the bot with api.
-    &#34;&#34;&#34;
-
-    def __init__(self, redis_host: str, bot_id: str) -&gt; Redis:
-        self.redis_async = from_url(
-            &#34;redis://&#34; + redis_host, encoding=&#34;utf-8&#34;, decode_responses=True
-        )
-        self.ps = self.redis_async.pubsub()
-        self.bot_id = bot_id
-
-    async def set(self, key: str, value: str):
-        &#34;&#34;&#34;
-        Sets the value of the given key.
-        &#34;&#34;&#34;
-        await self.redis_async.set(&#34;{}_{}&#34;.format(self.bot_id, key), value)
-
-    async def get(self, key: str):
-        &#34;&#34;&#34;
-        Gets the value of the given key.
-        &#34;&#34;&#34;
-        return await self.redis_async.get(&#34;{}_{}&#34;.format(self.bot_id, key))
-
-    def time_until_next_minute(self):
-        &#34;&#34;&#34;
-        Returns the time until the next minute.
-        &#34;&#34;&#34;
-        return 60 - datetime.utcnow().second
-
-    async def get_message(self, timeout: int):
-        &#34;&#34;&#34;
-        Gets the next message from the redis channel.
-        &#34;&#34;&#34;
-        message = await self.ps.get_message(
-            ignore_subscribe_messages=True, timeout=timeout
-        )
-        if message is not None:
-            return message[&#34;data&#34;]
-        return message
-
-    async def publish(self, channel: str, value: str):
-        &#34;&#34;&#34;
-        Notifies the listeners that something has changed.
-        &#34;&#34;&#34;
-        await self.redis_async.publish(&#34;{}_{}&#34;.format(self.bot_id, channel), value)
-
-    async def subscribe(self, channel: str):
-        &#34;&#34;&#34;
-        Subscribes to the redis channel.
-        &#34;&#34;&#34;
-        await self.ps.subscribe(&#34;{}_{}&#34;.format(self.bot_id, channel))</code></pre>
-</details>
 <h3>Methods</h3>
 <dl>
 <dt id="trading_bot_common.redis.RedisConnection.get"><code class="name flex">
@@ -200,101 +55,36 @@ class RedisConnection:
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the value of the given key.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def get(self, key: str):
-    &#34;&#34;&#34;
-    Gets the value of the given key.
-    &#34;&#34;&#34;
-    return await self.redis_async.get(&#34;{}_{}&#34;.format(self.bot_id, key))</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.redis.RedisConnection.get_message"><code class="name flex">
 <span>async def <span class="ident">get_message</span></span>(<span>self, timeout: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the next message from the redis channel.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def get_message(self, timeout: int):
-    &#34;&#34;&#34;
-    Gets the next message from the redis channel.
-    &#34;&#34;&#34;
-    message = await self.ps.get_message(
-        ignore_subscribe_messages=True, timeout=timeout
-    )
-    if message is not None:
-        return message[&#34;data&#34;]
-    return message</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.redis.RedisConnection.publish"><code class="name flex">
 <span>async def <span class="ident">publish</span></span>(<span>self, channel: str, value: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Notifies the listeners that something has changed.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def publish(self, channel: str, value: str):
-    &#34;&#34;&#34;
-    Notifies the listeners that something has changed.
-    &#34;&#34;&#34;
-    await self.redis_async.publish(&#34;{}_{}&#34;.format(self.bot_id, channel), value)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.redis.RedisConnection.set"><code class="name flex">
 <span>async def <span class="ident">set</span></span>(<span>self, key: str, value: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Sets the value of the given key.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def set(self, key: str, value: str):
-    &#34;&#34;&#34;
-    Sets the value of the given key.
-    &#34;&#34;&#34;
-    await self.redis_async.set(&#34;{}_{}&#34;.format(self.bot_id, key), value)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.redis.RedisConnection.subscribe"><code class="name flex">
 <span>async def <span class="ident">subscribe</span></span>(<span>self, channel: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Subscribes to the redis channel.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def subscribe(self, channel: str):
-    &#34;&#34;&#34;
-    Subscribes to the redis channel.
-    &#34;&#34;&#34;
-    await self.ps.subscribe(&#34;{}_{}&#34;.format(self.bot_id, channel))</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.redis.RedisConnection.time_until_next_minute"><code class="name flex">
 <span>def <span class="ident">time_until_next_minute</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the time until the next minute.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def time_until_next_minute(self):
-    &#34;&#34;&#34;
-    Returns the time until the next minute.
-    &#34;&#34;&#34;
-    return 60 - datetime.utcnow().second</code></pre>
-</details>
 </dd>
 </dl>
 </dd>

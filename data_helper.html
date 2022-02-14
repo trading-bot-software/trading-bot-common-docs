@@ -22,162 +22,6 @@
 <h1 class="title">Module <code>trading_bot_common.data_helper</code></h1>
 </header>
 <section id="section-intro">
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">from time import sleep
-from typing import Dict
-from trading_bot_common.model.config import ConfigNames
-from trading_bot_common.model.data import OHLCNames
-from trading_bot_common.istrategy import IStrategy
-from trading_bot_common.database import load_from_csv_file, save_to_csv_file
-from pandas import DataFrame
-import pandas as pd
-
-
-def retry_call(action, allowed_exceptions=[], failure_action=sleep):
-    current_try = 0
-    num_retries = 3
-    while current_try &lt; num_retries:
-        try:
-            return action()
-        except Exception as e:
-            print(e.__class__)
-            if e.__class__.__name__ not in allowed_exceptions:
-                raise
-            current_try += 1
-            if current_try == 1:
-                failure_action(60)  # 1 minute
-            if current_try == 2:
-                failure_action(5 * 60)  # 5 minutes
-            if current_try == 3:
-                failure_action(10 * 60)  # 10 minutes
-    raise Exception(&#34;Network Error. Retried 3 times&#34;)
-
-
-def rescale_dataframe_ohlc(df: DataFrame, timeframe: str) -&gt; DataFrame:
-    &#34;&#34;&#34;
-    Rescale OHLC dataframe to timeframe
-    &#34;&#34;&#34;
-
-    ohlc = {
-        OHLCNames.OPEN: &#34;first&#34;,
-        OHLCNames.HIGH: &#34;max&#34;,
-        OHLCNames.LOW: &#34;min&#34;,
-        OHLCNames.CLOSE: &#34;last&#34;,
-        OHLCNames.VOLUME: &#34;sum&#34;,
-    }
-    return (
-        df.set_index(OHLCNames.DATE)
-        .resample(IStrategy.RESAMPLE_DICT[timeframe])
-        .apply(ohlc)
-        .ffill()
-    ).reset_index(drop=False)
-
-
-def rescale_dataframe(df: DataFrame, timeframe: str) -&gt; DataFrame:
-    &#34;&#34;&#34;
-    Rescale dataframe to timeframe
-    &#34;&#34;&#34;
-
-    return (
-        df.set_index(OHLCNames.DATE)
-        .resample(IStrategy.RESAMPLE_DICT[timeframe])
-        .ffill()
-    ).reset_index(drop=False)
-
-
-def get_interval_text(config: Dict):
-    &#34;&#34;&#34;
-    Get interval text based on how much data is downloaded.
-    &#34;&#34;&#34;
-    return &#34;From {}. Number of days: {}&#34;.format(
-        pd.to_datetime(config[ConfigNames.START_DATE]), get_number_of_days(config)
-    )
-
-
-def get_number_of_days(config: Dict):
-    &#34;&#34;&#34;
-    Get number of days to download from config.
-    &#34;&#34;&#34;
-    return (
-        pd.to_datetime(config[ConfigNames.END_DATE])
-        - pd.to_datetime(config[ConfigNames.START_DATE])
-    ).days
-
-
-def fit_data(dfs: Dict[str, Dict[str, object]], config: Dict):
-    &#34;&#34;&#34;
-    Fit data to startData and endDate from config.
-    &#34;&#34;&#34;
-
-    warmup = config[ConfigNames.WARMUP]
-    for pair in config[ConfigNames.PAIRS]:
-        for timeframe in config[ConfigNames.TIMEFRAMES_PROCESS]:
-            df = dfs[pair][timeframe]
-            warmup_delta = pd.Timedelta(
-                warmup * IStrategy.TIMEFRAME_DELAY[timeframe], unit=&#34;m&#34;
-            )
-            start_date = pd.to_datetime(config[ConfigNames.START_DATE]) - warmup_delta
-            end_date = pd.to_datetime(config[ConfigNames.END_DATE])
-            df = df[
-                (df[OHLCNames.DATE] &gt;= start_date) &amp; (df[OHLCNames.DATE] &lt;= end_date)
-            ]
-            dfs[pair][timeframe] = df
-    return dfs
-
-
-def _load_single_data_final(pair: str, config: Dict):
-    path = &#34;output/{}/{}&#34;.format(
-        config[ConfigNames.OUTPUT_FOLDER],
-        pair.replace(&#34;/&#34;, &#34;_&#34;),
-    )
-    filename = &#34;{}_final.csv&#34;.format(pair.replace(&#34;/&#34;, &#34;_&#34;))
-    return load_from_csv_file(path, filename)
-
-
-def _load_single_raw_data(pair: str, timeframe: str, config: Dict) -&gt; DataFrame:
-    path = &#34;data/{}&#34;.format(
-        config[ConfigNames.OUTPUT_FOLDER],
-    )
-    filename = &#34;{}-{}.csv&#34;.format(pair.replace(&#34;/&#34;, &#34;_&#34;), timeframe)
-    return load_from_csv_file(path, filename, [OHLCNames.DATE])
-
-
-def save_data(pair: str, timeframe: str, df: DataFrame, config: Dict):
-    &#34;&#34;&#34;
-    Save data to file.
-    &#34;&#34;&#34;
-    path = &#34;data/{}&#34;.format(config[ConfigNames.OUTPUT_FOLDER])
-    filename = &#34;{}-{}.csv&#34;.format(pair.replace(&#34;/&#34;, &#34;_&#34;), timeframe)
-    save_to_csv_file(path, filename, df)
-
-
-def load_raw_data(config: Dict) -&gt; Dict[str, Dict[str, DataFrame]]:
-    &#34;&#34;&#34;
-    Load raw data from file.
-    &#34;&#34;&#34;
-
-    dfs = {}
-    for pair in config[ConfigNames.PAIRS]:
-        if pair not in dfs:
-            dfs[pair] = {}
-        for timeframe in config[ConfigNames.TIMEFRAMES_PROCESS]:
-            dfs[pair][timeframe] = _load_single_raw_data(pair, timeframe, config)
-    return dfs
-
-
-def load_computed_data(config: Dict) -&gt; Dict[str, DataFrame]:
-    &#34;&#34;&#34;
-    Load data already computed from file.
-    &#34;&#34;&#34;
-    dfs = {}
-    for pair in config[ConfigNames.PAIRS]:
-        if pair not in dfs:
-            dfs[pair] = _load_single_data_final(pair, config)
-    return dfs</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -191,207 +35,54 @@ def load_computed_data(config: Dict) -&gt; Dict[str, DataFrame]:
 </code></dt>
 <dd>
 <div class="desc"><p>Fit data to startData and endDate from config.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def fit_data(dfs: Dict[str, Dict[str, object]], config: Dict):
-    &#34;&#34;&#34;
-    Fit data to startData and endDate from config.
-    &#34;&#34;&#34;
-
-    warmup = config[ConfigNames.WARMUP]
-    for pair in config[ConfigNames.PAIRS]:
-        for timeframe in config[ConfigNames.TIMEFRAMES_PROCESS]:
-            df = dfs[pair][timeframe]
-            warmup_delta = pd.Timedelta(
-                warmup * IStrategy.TIMEFRAME_DELAY[timeframe], unit=&#34;m&#34;
-            )
-            start_date = pd.to_datetime(config[ConfigNames.START_DATE]) - warmup_delta
-            end_date = pd.to_datetime(config[ConfigNames.END_DATE])
-            df = df[
-                (df[OHLCNames.DATE] &gt;= start_date) &amp; (df[OHLCNames.DATE] &lt;= end_date)
-            ]
-            dfs[pair][timeframe] = df
-    return dfs</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.data_helper.get_interval_text"><code class="name flex">
 <span>def <span class="ident">get_interval_text</span></span>(<span>config: Dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get interval text based on how much data is downloaded.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_interval_text(config: Dict):
-    &#34;&#34;&#34;
-    Get interval text based on how much data is downloaded.
-    &#34;&#34;&#34;
-    return &#34;From {}. Number of days: {}&#34;.format(
-        pd.to_datetime(config[ConfigNames.START_DATE]), get_number_of_days(config)
-    )</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.data_helper.get_number_of_days"><code class="name flex">
 <span>def <span class="ident">get_number_of_days</span></span>(<span>config: Dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get number of days to download from config.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_number_of_days(config: Dict):
-    &#34;&#34;&#34;
-    Get number of days to download from config.
-    &#34;&#34;&#34;
-    return (
-        pd.to_datetime(config[ConfigNames.END_DATE])
-        - pd.to_datetime(config[ConfigNames.START_DATE])
-    ).days</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.data_helper.load_computed_data"><code class="name flex">
 <span>def <span class="ident">load_computed_data</span></span>(<span>config: Dict) ‑> Dict[str, pandas.core.frame.DataFrame]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Load data already computed from file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def load_computed_data(config: Dict) -&gt; Dict[str, DataFrame]:
-    &#34;&#34;&#34;
-    Load data already computed from file.
-    &#34;&#34;&#34;
-    dfs = {}
-    for pair in config[ConfigNames.PAIRS]:
-        if pair not in dfs:
-            dfs[pair] = _load_single_data_final(pair, config)
-    return dfs</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.data_helper.load_raw_data"><code class="name flex">
 <span>def <span class="ident">load_raw_data</span></span>(<span>config: Dict) ‑> Dict[str, Dict[str, pandas.core.frame.DataFrame]]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Load raw data from file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def load_raw_data(config: Dict) -&gt; Dict[str, Dict[str, DataFrame]]:
-    &#34;&#34;&#34;
-    Load raw data from file.
-    &#34;&#34;&#34;
-
-    dfs = {}
-    for pair in config[ConfigNames.PAIRS]:
-        if pair not in dfs:
-            dfs[pair] = {}
-        for timeframe in config[ConfigNames.TIMEFRAMES_PROCESS]:
-            dfs[pair][timeframe] = _load_single_raw_data(pair, timeframe, config)
-    return dfs</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.data_helper.rescale_dataframe"><code class="name flex">
 <span>def <span class="ident">rescale_dataframe</span></span>(<span>df: pandas.core.frame.DataFrame, timeframe: str) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Rescale dataframe to timeframe</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def rescale_dataframe(df: DataFrame, timeframe: str) -&gt; DataFrame:
-    &#34;&#34;&#34;
-    Rescale dataframe to timeframe
-    &#34;&#34;&#34;
-
-    return (
-        df.set_index(OHLCNames.DATE)
-        .resample(IStrategy.RESAMPLE_DICT[timeframe])
-        .ffill()
-    ).reset_index(drop=False)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.data_helper.rescale_dataframe_ohlc"><code class="name flex">
 <span>def <span class="ident">rescale_dataframe_ohlc</span></span>(<span>df: pandas.core.frame.DataFrame, timeframe: str) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Rescale OHLC dataframe to timeframe</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def rescale_dataframe_ohlc(df: DataFrame, timeframe: str) -&gt; DataFrame:
-    &#34;&#34;&#34;
-    Rescale OHLC dataframe to timeframe
-    &#34;&#34;&#34;
-
-    ohlc = {
-        OHLCNames.OPEN: &#34;first&#34;,
-        OHLCNames.HIGH: &#34;max&#34;,
-        OHLCNames.LOW: &#34;min&#34;,
-        OHLCNames.CLOSE: &#34;last&#34;,
-        OHLCNames.VOLUME: &#34;sum&#34;,
-    }
-    return (
-        df.set_index(OHLCNames.DATE)
-        .resample(IStrategy.RESAMPLE_DICT[timeframe])
-        .apply(ohlc)
-        .ffill()
-    ).reset_index(drop=False)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.data_helper.retry_call"><code class="name flex">
 <span>def <span class="ident">retry_call</span></span>(<span>action, allowed_exceptions=[], failure_action=&lt;built-in function sleep&gt;)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def retry_call(action, allowed_exceptions=[], failure_action=sleep):
-    current_try = 0
-    num_retries = 3
-    while current_try &lt; num_retries:
-        try:
-            return action()
-        except Exception as e:
-            print(e.__class__)
-            if e.__class__.__name__ not in allowed_exceptions:
-                raise
-            current_try += 1
-            if current_try == 1:
-                failure_action(60)  # 1 minute
-            if current_try == 2:
-                failure_action(5 * 60)  # 5 minutes
-            if current_try == 3:
-                failure_action(10 * 60)  # 10 minutes
-    raise Exception(&#34;Network Error. Retried 3 times&#34;)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.data_helper.save_data"><code class="name flex">
 <span>def <span class="ident">save_data</span></span>(<span>pair: str, timeframe: str, df: pandas.core.frame.DataFrame, config: Dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Save data to file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_data(pair: str, timeframe: str, df: DataFrame, config: Dict):
-    &#34;&#34;&#34;
-    Save data to file.
-    &#34;&#34;&#34;
-    path = &#34;data/{}&#34;.format(config[ConfigNames.OUTPUT_FOLDER])
-    filename = &#34;{}-{}.csv&#34;.format(pair.replace(&#34;/&#34;, &#34;_&#34;), timeframe)
-    save_to_csv_file(path, filename, df)</code></pre>
-</details>
 </dd>
 </dl>
 </section>

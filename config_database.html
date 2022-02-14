@@ -23,102 +23,6 @@
 </header>
 <section id="section-intro">
 <p>Database used to store the config.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Database used to store the config.
-&#34;&#34;&#34;
-
-from os import getenv
-import inspect
-from typing import Dict
-from trading_bot_common.database import Database, save_to_json_file, load_from_json_file
-from trading_bot_common.model.config import ConfigNames, ConfigTypes
-
-
-def _create_config_query_params():
-    config_names = [
-        value for name, value in inspect.getmembers(ConfigNames) if name[0].isupper()
-    ]
-    config_types = [
-        value for name, value in inspect.getmembers(ConfigTypes) if name[0].isupper()
-    ]
-    query = &#34;&#34;
-    for name, type_value in zip(config_names, config_types):
-        if name == config_names[-1]:
-            query += f&#39;&#34;{name}&#34; {type_value}&#39;
-        else:
-            query += f&#39;&#34;{name}&#34; {type_value},&#39;
-    return query
-
-
-def save_config_to_file(config: Dict):
-    &#34;&#34;&#34;
-    Updates the config json data in the file.
-    &#34;&#34;&#34;
-    save_to_json_file(&#34;output&#34;, &#34;config.json&#34;, config)
-
-
-def load_config_from_file() -&gt; Dict:
-    &#34;&#34;&#34;
-    Load the config json data from the file.
-    &#34;&#34;&#34;
-    return load_from_json_file(&#34;output&#34;, &#34;config.json&#34;)
-
-
-class ConfigDatabase(Database):
-    &#34;&#34;&#34;
-    Database used to store the config.
-    &#34;&#34;&#34;
-
-    CONFIG_TABLE = &#34;config&#34;
-
-    POSTGRE_CREATE_QUERY = _create_config_query_params()
-
-    def __init__(
-        self,
-        bot_id: str,
-        database: str = None,
-        mongo_db: str = None,
-        postgre_db: str = None,
-    ):
-        super().__init__(mongo_db, postgre_db, database)
-        self.bot_id = bot_id
-
-    def _insert_empty(self):
-        return super()._insert_empty(
-            ConfigDatabase.CONFIG_TABLE,
-            self.bot_id,
-            ConfigDatabase.POSTGRE_CREATE_QUERY,
-        )
-
-    def load_from_db(self):
-        return super().load_from_db(ConfigDatabase.CONFIG_TABLE, self.bot_id)
-
-    def save_to_db(self, key: str, value: str):
-        return super().save_to_db(ConfigDatabase.CONFIG_TABLE, self.bot_id, key, value)
-
-
-def get_config_database_from_env(
-    bot_id: str,
-    database: str,
-    mongo_db_env: str = &#34;MONGO_DB&#34;,
-    postgre_db_env: str = &#34;POSTGRE_DB&#34;,
-) -&gt; Database:
-    &#34;&#34;&#34;
-    Gets the database from the environment var.
-    &#34;&#34;&#34;
-    if getenv(mongo_db_env) is None and getenv(postgre_db_env) is None:
-        raise Exception(&#34;{} or {} not set&#34;.format(mongo_db_env, postgre_db_env))
-    return ConfigDatabase(
-        bot_id,
-        database,
-        getenv(mongo_db_env),
-        getenv(postgre_db_env),
-    )</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -132,60 +36,18 @@ def get_config_database_from_env(
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the database from the environment var.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_config_database_from_env(
-    bot_id: str,
-    database: str,
-    mongo_db_env: str = &#34;MONGO_DB&#34;,
-    postgre_db_env: str = &#34;POSTGRE_DB&#34;,
-) -&gt; Database:
-    &#34;&#34;&#34;
-    Gets the database from the environment var.
-    &#34;&#34;&#34;
-    if getenv(mongo_db_env) is None and getenv(postgre_db_env) is None:
-        raise Exception(&#34;{} or {} not set&#34;.format(mongo_db_env, postgre_db_env))
-    return ConfigDatabase(
-        bot_id,
-        database,
-        getenv(mongo_db_env),
-        getenv(postgre_db_env),
-    )</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.config_database.load_config_from_file"><code class="name flex">
 <span>def <span class="ident">load_config_from_file</span></span>(<span>) ‑> Dict</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Load the config json data from the file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def load_config_from_file() -&gt; Dict:
-    &#34;&#34;&#34;
-    Load the config json data from the file.
-    &#34;&#34;&#34;
-    return load_from_json_file(&#34;output&#34;, &#34;config.json&#34;)</code></pre>
-</details>
 </dd>
 <dt id="trading_bot_common.config_database.save_config_to_file"><code class="name flex">
 <span>def <span class="ident">save_config_to_file</span></span>(<span>config: Dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Updates the config json data in the file.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_config_to_file(config: Dict):
-    &#34;&#34;&#34;
-    Updates the config json data in the file.
-    &#34;&#34;&#34;
-    save_to_json_file(&#34;output&#34;, &#34;config.json&#34;, config)</code></pre>
-</details>
 </dd>
 </dl>
 </section>
@@ -201,42 +63,6 @@ def get_config_database_from_env(
 <p>Initializes the reader.
 Send either mongo or postrgre connection.
 Database is needed only for mongo one.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class ConfigDatabase(Database):
-    &#34;&#34;&#34;
-    Database used to store the config.
-    &#34;&#34;&#34;
-
-    CONFIG_TABLE = &#34;config&#34;
-
-    POSTGRE_CREATE_QUERY = _create_config_query_params()
-
-    def __init__(
-        self,
-        bot_id: str,
-        database: str = None,
-        mongo_db: str = None,
-        postgre_db: str = None,
-    ):
-        super().__init__(mongo_db, postgre_db, database)
-        self.bot_id = bot_id
-
-    def _insert_empty(self):
-        return super()._insert_empty(
-            ConfigDatabase.CONFIG_TABLE,
-            self.bot_id,
-            ConfigDatabase.POSTGRE_CREATE_QUERY,
-        )
-
-    def load_from_db(self):
-        return super().load_from_db(ConfigDatabase.CONFIG_TABLE, self.bot_id)
-
-    def save_to_db(self, key: str, value: str):
-        return super().save_to_db(ConfigDatabase.CONFIG_TABLE, self.bot_id, key, value)</code></pre>
-</details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a></li>
