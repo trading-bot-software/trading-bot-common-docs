@@ -29,8 +29,75 @@
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="trading_bot_common.trade_loader.append_trade"><code class="name flex">
+<span>def <span class="ident">append_trade</span></span>(<span>trades: pandas.core.frame.DataFrame, trade: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="trading_bot_common.trade_loader.create_trade_loader_from_env"><code class="name flex">
+<span>def <span class="ident">create_trade_loader_from_env</span></span>(<span>bot_id: str, database: str = None, mongo_db_env: str = 'MONGO_DB', postgre_db_env: str = 'POSTGRE_DB') ‑> <a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the database from the environment var.</p></div>
+</dd>
+</dl>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="trading_bot_common.trade_loader.TradeLoader"><code class="flex name class">
+<span>class <span class="ident">TradeLoader</span></span>
+<span>(</span><span>bot_id: str, database: str = None, mongo_db: str = None, postgre_db: str = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read and load trades from csv file or database.</p>
+<p>Initializes the reader.
+Send either mongo or postrgre connection.
+Database is needed only for mongo one.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="trading_bot_common.trade_loader.TradeLoader.POSTGRE_CREATE_QUERY"><code class="name">var <span class="ident">POSTGRE_CREATE_QUERY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="trading_bot_common.trade_loader.TradeLoader.TRADE_TABLE"><code class="name">var <span class="ident">TRADE_TABLE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="trading_bot_common.trade_loader.TradeLoader.load_trades"><code class="name flex">
+<span>def <span class="ident">load_trades</span></span>(<span>self, config: Dict) ‑> pandas.core.frame.DataFrame</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="trading_bot_common.trade_loader.TradeLoader.save_trades"><code class="name flex">
+<span>def <span class="ident">save_trades</span></span>(<span>self, trades: pandas.core.frame.DataFrame, config: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save trades to file.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a></b></code>:
+<ul class="hlist">
+<li><code><a title="trading_bot_common.database.Database.load_from_db" href="database.html#trading_bot_common.database.Database.load_from_db">load_from_db</a></code></li>
+<li><code><a title="trading_bot_common.database.Database.save_to_db" href="database.html#trading_bot_common.database.Database.save_to_db">save_to_db</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -42,6 +109,25 @@
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="trading_bot_common" href="index.html">trading_bot_common</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="trading_bot_common.trade_loader.append_trade" href="#trading_bot_common.trade_loader.append_trade">append_trade</a></code></li>
+<li><code><a title="trading_bot_common.trade_loader.create_trade_loader_from_env" href="#trading_bot_common.trade_loader.create_trade_loader_from_env">create_trade_loader_from_env</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="trading_bot_common.trade_loader.TradeLoader" href="#trading_bot_common.trade_loader.TradeLoader">TradeLoader</a></code></h4>
+<ul class="">
+<li><code><a title="trading_bot_common.trade_loader.TradeLoader.POSTGRE_CREATE_QUERY" href="#trading_bot_common.trade_loader.TradeLoader.POSTGRE_CREATE_QUERY">POSTGRE_CREATE_QUERY</a></code></li>
+<li><code><a title="trading_bot_common.trade_loader.TradeLoader.TRADE_TABLE" href="#trading_bot_common.trade_loader.TradeLoader.TRADE_TABLE">TRADE_TABLE</a></code></li>
+<li><code><a title="trading_bot_common.trade_loader.TradeLoader.load_trades" href="#trading_bot_common.trade_loader.TradeLoader.load_trades">load_trades</a></code></li>
+<li><code><a title="trading_bot_common.trade_loader.TradeLoader.save_trades" href="#trading_bot_common.trade_loader.TradeLoader.save_trades">save_trades</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

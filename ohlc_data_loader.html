@@ -31,6 +31,12 @@
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="trading_bot_common.ohlc_data_loader.create_ohlc_data_loader_from_env"><code class="name flex">
+<span>def <span class="ident">create_ohlc_data_loader_from_env</span></span>(<span>bot_id: str, database: str, mongo_db_env: str = 'MONGO_DB', postgre_db_env: str = 'POSTGRE_DB') ‑> <a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the database from the environment var.</p></div>
+</dd>
 <dt id="trading_bot_common.ohlc_data_loader.fit_data"><code class="name flex">
 <span>def <span class="ident">fit_data</span></span>(<span>dfs: Dict[str, Dict[str, object]], config: Dict)</span>
 </code></dt>
@@ -143,6 +149,7 @@ Database is needed only for mongo one.</p></div>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="trading_bot_common.ohlc_data_loader.create_ohlc_data_loader_from_env" href="#trading_bot_common.ohlc_data_loader.create_ohlc_data_loader_from_env">create_ohlc_data_loader_from_env</a></code></li>
 <li><code><a title="trading_bot_common.ohlc_data_loader.fit_data" href="#trading_bot_common.ohlc_data_loader.fit_data">fit_data</a></code></li>
 <li><code><a title="trading_bot_common.ohlc_data_loader.get_interval_text" href="#trading_bot_common.ohlc_data_loader.get_interval_text">get_interval_text</a></code></li>
 <li><code><a title="trading_bot_common.ohlc_data_loader.get_number_of_days" href="#trading_bot_common.ohlc_data_loader.get_number_of_days">get_number_of_days</a></code></li>
