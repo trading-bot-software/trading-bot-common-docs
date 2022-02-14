@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          name: trading-bot-software/trading-bot-common
+          repository: trading-bot-software/trading-bot-common
           ref: gh-pages
           token: ${{ secrets.PAT_TOKEN }}
       
