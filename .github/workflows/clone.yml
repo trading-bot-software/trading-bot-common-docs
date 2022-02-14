@@ -1,8 +1,6 @@
 name: Trading Bot Common Docs
 on:
   workflow_dispatch:
-    types:
-      - trigger
 
 jobs:
   clone:
