@@ -81,6 +81,12 @@ Uses config values:
 <dd>
 <div class="desc"><p>Set a limit order.</p></div>
 </dd>
+<dt id="trading_bot_common.backtest_actions.BacktestActions.set_market_order"><code class="name flex">
+<span>def <span class="ident">set_market_order</span></span>(<span>self, pair: str, side: str, amount: float)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set a market order.</p></div>
+</dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.set_oco_limit_order"><code class="name flex">
 <span>def <span class="ident">set_oco_limit_order</span></span>(<span>self, pair: str, side: str, amount: float, stop_loss: float, stop_loss_limit: float, take_profit: float) ‑> bool</span>
 </code></dt>
@@ -132,6 +138,7 @@ Uses config values:
 <li><code><a title="trading_bot_common.backtest_actions.BacktestActions.get_fee" href="#trading_bot_common.backtest_actions.BacktestActions.get_fee">get_fee</a></code></li>
 <li><code><a title="trading_bot_common.backtest_actions.BacktestActions.get_open_orders" href="#trading_bot_common.backtest_actions.BacktestActions.get_open_orders">get_open_orders</a></code></li>
 <li><code><a title="trading_bot_common.backtest_actions.BacktestActions.set_limit_order" href="#trading_bot_common.backtest_actions.BacktestActions.set_limit_order">set_limit_order</a></code></li>
+<li><code><a title="trading_bot_common.backtest_actions.BacktestActions.set_market_order" href="#trading_bot_common.backtest_actions.BacktestActions.set_market_order">set_market_order</a></code></li>
 <li><code><a title="trading_bot_common.backtest_actions.BacktestActions.set_oco_limit_order" href="#trading_bot_common.backtest_actions.BacktestActions.set_oco_limit_order">set_oco_limit_order</a></code></li>
 <li><code><a title="trading_bot_common.backtest_actions.BacktestActions.set_stop_limit_order" href="#trading_bot_common.backtest_actions.BacktestActions.set_stop_limit_order">set_stop_limit_order</a></code></li>
 <li><code><a title="trading_bot_common.backtest_actions.BacktestActions.should_end_oco_order" href="#trading_bot_common.backtest_actions.BacktestActions.should_end_oco_order">should_end_oco_order</a></code></li>
