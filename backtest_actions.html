@@ -52,7 +52,7 @@ Uses config values:
 <div class="desc"><p>Cancel all open orders for a pair.</p></div>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.edit_take_profit_order"><code class="name flex">
-<span>def <span class="ident">edit_take_profit_order</span></span>(<span>self, pair: str, side: str, amount: float, stop_loss: float, stop_loss_limit: float, take_profit: float, orders: List) ‑> None</span>
+<span>def <span class="ident">edit_take_profit_order</span></span>(<span>self, pair: str, side: <a title="trading_bot_common.model.trade.TradeSide" href="model/trade.html#trading_bot_common.model.trade.TradeSide">TradeSide</a>, amount: float, stop_loss: float, stop_loss_limit: float, take_profit: float, orders: List) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Edit a take profit order.</p></div>
@@ -76,31 +76,31 @@ Uses config values:
 <div class="desc"><p>Get open orders for a pair.</p></div>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.set_limit_order"><code class="name flex">
-<span>def <span class="ident">set_limit_order</span></span>(<span>self, pair: str, side: str, amount: float, price: float) ‑> None</span>
+<span>def <span class="ident">set_limit_order</span></span>(<span>self, pair: str, side: <a title="trading_bot_common.model.trade.TradeSide" href="model/trade.html#trading_bot_common.model.trade.TradeSide">TradeSide</a>, amount: float, price: float) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a limit order.</p></div>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.set_market_order"><code class="name flex">
-<span>def <span class="ident">set_market_order</span></span>(<span>self, pair: str, side: str, amount: float)</span>
+<span>def <span class="ident">set_market_order</span></span>(<span>self, pair: str, side: <a title="trading_bot_common.model.trade.TradeSide" href="model/trade.html#trading_bot_common.model.trade.TradeSide">TradeSide</a>, amount: float)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a market order.</p></div>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.set_oco_limit_order"><code class="name flex">
-<span>def <span class="ident">set_oco_limit_order</span></span>(<span>self, pair: str, side: str, amount: float, stop_loss: float, stop_loss_limit: float, take_profit: float) ‑> bool</span>
+<span>def <span class="ident">set_oco_limit_order</span></span>(<span>self, pair: str, side: <a title="trading_bot_common.model.trade.TradeSide" href="model/trade.html#trading_bot_common.model.trade.TradeSide">TradeSide</a>, amount: float, stop_loss: float, stop_loss_limit: float, take_profit: float) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set an OCO limit order.</p></div>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.set_stop_limit_order"><code class="name flex">
-<span>def <span class="ident">set_stop_limit_order</span></span>(<span>self, pair: str, side: str, amount: float, price: float, stop_price: float) ‑> bool</span>
+<span>def <span class="ident">set_stop_limit_order</span></span>(<span>self, pair: str, side: <a title="trading_bot_common.model.trade.TradeSide" href="model/trade.html#trading_bot_common.model.trade.TradeSide">TradeSide</a>, amount: float, price: float, stop_price: float) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a stop limit order.</p></div>
 </dd>
 <dt id="trading_bot_common.backtest_actions.BacktestActions.should_end_oco_order"><code class="name flex">
-<span>def <span class="ident">should_end_oco_order</span></span>(<span>self, pair: str, side: str, take_profit: float, stop_loss: float, high: float, low: float) ‑> bool</span>
+<span>def <span class="ident">should_end_oco_order</span></span>(<span>self, pair: str, side: <a title="trading_bot_common.model.trade.TradeSide" href="model/trade.html#trading_bot_common.model.trade.TradeSide">TradeSide</a>, take_profit: float, stop_loss: float, high: float, low: float) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Check if an OCO order should be ended.</p></div>
