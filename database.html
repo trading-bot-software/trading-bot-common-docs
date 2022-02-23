@@ -31,6 +31,12 @@
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="trading_bot_common.database.create_config_query_params"><code class="name flex">
+<span>def <span class="ident">create_config_query_params</span></span>(<span>ClassNames, ClassTypes)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="trading_bot_common.database.load_from_csv_file"><code class="name flex">
 <span>def <span class="ident">load_from_csv_file</span></span>(<span>path: str, filename: str, parse_dates: List[str]) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
@@ -86,21 +92,6 @@ Database is needed only for mongo one.</p></div>
 <div class="desc"></div>
 </dd>
 </dl>
-<h3>Methods</h3>
-<dl>
-<dt id="trading_bot_common.database.Database.load_from_db"><code class="name flex">
-<span>def <span class="ident">load_from_db</span></span>(<span>self, table: str, id: str)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Gets the data from the database.</p></div>
-</dd>
-<dt id="trading_bot_common.database.Database.save_to_db"><code class="name flex">
-<span>def <span class="ident">save_to_db</span></span>(<span>self, table: str, id: str, key: str, value: str)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Saves the data to the database.</p></div>
-</dd>
-</dl>
 </dd>
 </dl>
 </section>
@@ -118,6 +109,7 @@ Database is needed only for mongo one.</p></div>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="trading_bot_common.database.create_config_query_params" href="#trading_bot_common.database.create_config_query_params">create_config_query_params</a></code></li>
 <li><code><a title="trading_bot_common.database.load_from_csv_file" href="#trading_bot_common.database.load_from_csv_file">load_from_csv_file</a></code></li>
 <li><code><a title="trading_bot_common.database.load_from_json_file" href="#trading_bot_common.database.load_from_json_file">load_from_json_file</a></code></li>
 <li><code><a title="trading_bot_common.database.save_to_csv_file" href="#trading_bot_common.database.save_to_csv_file">save_to_csv_file</a></code></li>
@@ -131,8 +123,6 @@ Database is needed only for mongo one.</p></div>
 <ul class="">
 <li><code><a title="trading_bot_common.database.Database.BOT_TABLE" href="#trading_bot_common.database.Database.BOT_TABLE">BOT_TABLE</a></code></li>
 <li><code><a title="trading_bot_common.database.Database.POSTGRE_CREATE_QUERY" href="#trading_bot_common.database.Database.POSTGRE_CREATE_QUERY">POSTGRE_CREATE_QUERY</a></code></li>
-<li><code><a title="trading_bot_common.database.Database.load_from_db" href="#trading_bot_common.database.Database.load_from_db">load_from_db</a></code></li>
-<li><code><a title="trading_bot_common.database.Database.save_to_db" href="#trading_bot_common.database.Database.save_to_db">save_to_db</a></code></li>
 </ul>
 </li>
 </ul>

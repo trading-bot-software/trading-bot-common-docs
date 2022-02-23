@@ -97,6 +97,12 @@ Database is needed only for mongo one.</p></div>
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="trading_bot_common.data_loader.DataLoader.create_table"><code class="name flex">
+<span>def <span class="ident">create_table</span></span>(<span>self, pair: str, timeframe: str, config: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="trading_bot_common.data_loader.DataLoader.load_computed_data"><code class="name flex">
 <span>def <span class="ident">load_computed_data</span></span>(<span>self, config: Dict) ‑> Dict[str, pandas.core.frame.DataFrame]</span>
 </code></dt>
@@ -109,22 +115,31 @@ Database is needed only for mongo one.</p></div>
 <dd>
 <div class="desc"><p>Load raw data from file.</p></div>
 </dd>
-<dt id="trading_bot_common.data_loader.DataLoader.save_data"><code class="name flex">
-<span>def <span class="ident">save_data</span></span>(<span>self, pair: str, timeframe: str, df: pandas.core.frame.DataFrame, config: Dict)</span>
+<dt id="trading_bot_common.data_loader.DataLoader.load_raw_data_from_db"><code class="name flex">
+<span>def <span class="ident">load_raw_data_from_db</span></span>(<span>self, config: Dict) ‑> Dict[str, Dict[str, pandas.core.frame.DataFrame]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Load raw data from database.</p></div>
+</dd>
+<dt id="trading_bot_common.data_loader.DataLoader.save_computed_data"><code class="name flex">
+<span>def <span class="ident">save_computed_data</span></span>(<span>self, pair: str, timeframe: str, df: pandas.core.frame.DataFrame, config: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save computed data to file.</p></div>
+</dd>
+<dt id="trading_bot_common.data_loader.DataLoader.save_raw_data"><code class="name flex">
+<span>def <span class="ident">save_raw_data</span></span>(<span>self, pair: str, timeframe: str, df: pandas.core.frame.DataFrame, config: Dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Save data to file.</p></div>
 </dd>
+<dt id="trading_bot_common.data_loader.DataLoader.save_raw_data_to_db"><code class="name flex">
+<span>def <span class="ident">save_raw_data_to_db</span></span>(<span>self, pair: str, timeframe: str, df: pandas.core.frame.DataFrame, config: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save raw data to database.</p></div>
+</dd>
 </dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a></b></code>:
-<ul class="hlist">
-<li><code><a title="trading_bot_common.database.Database.load_from_db" href="database.html#trading_bot_common.database.Database.load_from_db">load_from_db</a></code></li>
-<li><code><a title="trading_bot_common.database.Database.save_to_db" href="database.html#trading_bot_common.database.Database.save_to_db">save_to_db</a></code></li>
-</ul>
-</li>
-</ul>
 </dd>
 <dt id="trading_bot_common.data_loader.OHLCDataLoader"><code class="flex name class">
 <span>class <span class="ident">OHLCDataLoader</span></span>
@@ -145,10 +160,11 @@ Database is needed only for mongo one.</p></div>
 <li><code><b><a title="trading_bot_common.data_loader.DataLoader" href="#trading_bot_common.data_loader.DataLoader">DataLoader</a></b></code>:
 <ul class="hlist">
 <li><code><a title="trading_bot_common.data_loader.DataLoader.load_computed_data" href="#trading_bot_common.data_loader.DataLoader.load_computed_data">load_computed_data</a></code></li>
-<li><code><a title="trading_bot_common.data_loader.DataLoader.load_from_db" href="database.html#trading_bot_common.database.Database.load_from_db">load_from_db</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.DataLoader.load_raw_data" href="#trading_bot_common.data_loader.DataLoader.load_raw_data">load_raw_data</a></code></li>
-<li><code><a title="trading_bot_common.data_loader.DataLoader.save_data" href="#trading_bot_common.data_loader.DataLoader.save_data">save_data</a></code></li>
-<li><code><a title="trading_bot_common.data_loader.DataLoader.save_to_db" href="database.html#trading_bot_common.database.Database.save_to_db">save_to_db</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataLoader.load_raw_data_from_db" href="#trading_bot_common.data_loader.DataLoader.load_raw_data_from_db">load_raw_data_from_db</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataLoader.save_computed_data" href="#trading_bot_common.data_loader.DataLoader.save_computed_data">save_computed_data</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataLoader.save_raw_data" href="#trading_bot_common.data_loader.DataLoader.save_raw_data">save_raw_data</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataLoader.save_raw_data_to_db" href="#trading_bot_common.data_loader.DataLoader.save_raw_data_to_db">save_raw_data_to_db</a></code></li>
 </ul>
 </li>
 </ul>
@@ -183,9 +199,13 @@ Database is needed only for mongo one.</p></div>
 <li>
 <h4><code><a title="trading_bot_common.data_loader.DataLoader" href="#trading_bot_common.data_loader.DataLoader">DataLoader</a></code></h4>
 <ul class="">
+<li><code><a title="trading_bot_common.data_loader.DataLoader.create_table" href="#trading_bot_common.data_loader.DataLoader.create_table">create_table</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.DataLoader.load_computed_data" href="#trading_bot_common.data_loader.DataLoader.load_computed_data">load_computed_data</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.DataLoader.load_raw_data" href="#trading_bot_common.data_loader.DataLoader.load_raw_data">load_raw_data</a></code></li>
-<li><code><a title="trading_bot_common.data_loader.DataLoader.save_data" href="#trading_bot_common.data_loader.DataLoader.save_data">save_data</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataLoader.load_raw_data_from_db" href="#trading_bot_common.data_loader.DataLoader.load_raw_data_from_db">load_raw_data_from_db</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataLoader.save_computed_data" href="#trading_bot_common.data_loader.DataLoader.save_computed_data">save_computed_data</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataLoader.save_raw_data" href="#trading_bot_common.data_loader.DataLoader.save_raw_data">save_raw_data</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataLoader.save_raw_data_to_db" href="#trading_bot_common.data_loader.DataLoader.save_raw_data_to_db">save_raw_data_to_db</a></code></li>
 </ul>
 </li>
 <li>
