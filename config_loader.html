@@ -29,32 +29,16 @@
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="trading_bot_common.config_loader.create_config_loader_from_env"><code class="name flex">
-<span>def <span class="ident">create_config_loader_from_env</span></span>(<span>bot_id: str, database: str = None, mongo_db_env: str = 'MONGO_DB', postgre_db_env: str = 'POSTGRE_DB') ‑> <a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Gets the database from the environment var.</p></div>
-</dd>
-</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
 <dt id="trading_bot_common.config_loader.ConfigLoader"><code class="flex name class">
 <span>class <span class="ident">ConfigLoader</span></span>
-<span>(</span><span>bot_id: str, database: str = None, mongo_db: str = None, postgre_db: str = None)</span>
+<span>(</span><span>bot_id: str, database: <a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a> = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Used to store the config in database and file.</p>
-<p>Initializes the reader.
-Send either mongo or postrgre connection.
-Database is needed only for mongo one.</p></div>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a></li>
-</ul>
+<div class="desc"><p>Used to store the config in database and file.</p></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="trading_bot_common.config_loader.ConfigLoader.CONFIG_TABLE"><code class="name">var <span class="ident">CONFIG_TABLE</span></code></dt>
@@ -112,11 +96,6 @@ Database is needed only for mongo one.</p></div>
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="trading_bot_common" href="index.html">trading_bot_common</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="trading_bot_common.config_loader.create_config_loader_from_env" href="#trading_bot_common.config_loader.create_config_loader_from_env">create_config_loader_from_env</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>

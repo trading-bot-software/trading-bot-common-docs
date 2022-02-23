@@ -37,6 +37,12 @@
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="trading_bot_common.database.create_database_from_env"><code class="name flex">
+<span>def <span class="ident">create_database_from_env</span></span>(<span>database: str = None, mongo_db_env: str = 'MONGO_DB', postgre_db_env: str = 'POSTGRE_DB') ‑> <a title="trading_bot_common.database.Database" href="#trading_bot_common.database.Database">Database</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the database from the environment var.</p></div>
+</dd>
 <dt id="trading_bot_common.database.load_from_csv_file"><code class="name flex">
 <span>def <span class="ident">load_from_csv_file</span></span>(<span>path: str, filename: str, parse_dates: List[str]) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
@@ -75,12 +81,6 @@
 <p>Initializes the reader.
 Send either mongo or postrgre connection.
 Database is needed only for mongo one.</p></div>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="trading_bot_common.config_loader.ConfigLoader" href="config_loader.html#trading_bot_common.config_loader.ConfigLoader">ConfigLoader</a></li>
-<li><a title="trading_bot_common.data_loader.DataLoader" href="data_loader.html#trading_bot_common.data_loader.DataLoader">DataLoader</a></li>
-<li><a title="trading_bot_common.trade_loader.TradeLoader" href="trade_loader.html#trading_bot_common.trade_loader.TradeLoader">TradeLoader</a></li>
-</ul>
 <h3>Class variables</h3>
 <dl>
 <dt id="trading_bot_common.database.Database.BOT_TABLE"><code class="name">var <span class="ident">BOT_TABLE</span></code></dt>
@@ -110,6 +110,7 @@ Database is needed only for mongo one.</p></div>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="trading_bot_common.database.create_config_query_params" href="#trading_bot_common.database.create_config_query_params">create_config_query_params</a></code></li>
+<li><code><a title="trading_bot_common.database.create_database_from_env" href="#trading_bot_common.database.create_database_from_env">create_database_from_env</a></code></li>
 <li><code><a title="trading_bot_common.database.load_from_csv_file" href="#trading_bot_common.database.load_from_csv_file">load_from_csv_file</a></code></li>
 <li><code><a title="trading_bot_common.database.load_from_json_file" href="#trading_bot_common.database.load_from_json_file">load_from_json_file</a></code></li>
 <li><code><a title="trading_bot_common.database.save_to_csv_file" href="#trading_bot_common.database.save_to_csv_file">save_to_csv_file</a></code></li>
