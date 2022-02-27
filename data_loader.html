@@ -31,11 +31,23 @@
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="trading_bot_common.data_loader.download_data_monthyl"><code class="name flex">
+<span>def <span class="ident">download_data_monthyl</span></span>(<span>config: Dict, extra_data, logger: <a title="trading_bot_common.logger.Logger" href="logger.html#trading_bot_common.logger.Logger">Logger</a>, data_loader: <a title="trading_bot_common.data_loader.DataLoader" href="#trading_bot_common.data_loader.DataLoader">DataLoader</a>, data_downloader: <a title="trading_bot_common.data_loader.DataDownloader" href="#trading_bot_common.data_loader.DataDownloader">DataDownloader</a>) ‑> Dict[str, Dict[str, object]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Downloads data from the specified dates.</p></div>
+</dd>
 <dt id="trading_bot_common.data_loader.fit_data"><code class="name flex">
 <span>def <span class="ident">fit_data</span></span>(<span>dfs: Dict[str, Dict[str, object]], config: Dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Fit data to startData and endDate from config.</p></div>
+</dd>
+<dt id="trading_bot_common.data_loader.for_every_month"><code class="name flex">
+<span>def <span class="ident">for_every_month</span></span>(<span>function, config)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Call function over every month from config from start to end.</p></div>
 </dd>
 <dt id="trading_bot_common.data_loader.get_interval_text"><code class="name flex">
 <span>def <span class="ident">get_interval_text</span></span>(<span>config: Dict)</span>
@@ -48,6 +60,12 @@
 </code></dt>
 <dd>
 <div class="desc"><p>Get number of days to download from config.</p></div>
+</dd>
+<dt id="trading_bot_common.data_loader.load_data_multimonth"><code class="name flex">
+<span>def <span class="ident">load_data_multimonth</span></span>(<span>config: Dict, data_loader: <a title="trading_bot_common.data_loader.DataLoader" href="#trading_bot_common.data_loader.DataLoader">DataLoader</a>) ‑> Dict[str, Dict[str, object]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Loads data from the specified dates.</p></div>
 </dd>
 <dt id="trading_bot_common.data_loader.rescale_dataframe"><code class="name flex">
 <span>def <span class="ident">rescale_dataframe</span></span>(<span>df: pandas.core.frame.DataFrame, timeframe: str) ‑> pandas.core.frame.DataFrame</span>
@@ -72,6 +90,28 @@
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="trading_bot_common.data_loader.DataDownloader"><code class="flex name class">
+<span>class <span class="ident">DataDownloader</span></span>
+<span>(</span><span>config: Dict, logger: <a title="trading_bot_common.logger.Logger" href="logger.html#trading_bot_common.logger.Logger">Logger</a>, data_loader: <a title="trading_bot_common.data_loader.DataLoader" href="#trading_bot_common.data_loader.DataLoader">DataLoader</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Scrape data interface.</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="trading_bot_common.data_loader.DataDownloader.download_data"><code class="name flex">
+<span>def <span class="ident">download_data</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Download data.</p></div>
+</dd>
+<dt id="trading_bot_common.data_loader.DataDownloader.set_config"><code class="name flex">
+<span>def <span class="ident">set_config</span></span>(<span>self, config: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set new config.</p></div>
+</dd>
+</dl>
+</dd>
 <dt id="trading_bot_common.data_loader.DataLoader"><code class="flex name class">
 <span>class <span class="ident">DataLoader</span></span>
 <span>(</span><span>bot_id: str, database: <a title="trading_bot_common.database.Database" href="database.html#trading_bot_common.database.Database">Database</a> = None)</span>
@@ -168,9 +208,12 @@
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="trading_bot_common.data_loader.download_data_monthyl" href="#trading_bot_common.data_loader.download_data_monthyl">download_data_monthyl</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.fit_data" href="#trading_bot_common.data_loader.fit_data">fit_data</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.for_every_month" href="#trading_bot_common.data_loader.for_every_month">for_every_month</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.get_interval_text" href="#trading_bot_common.data_loader.get_interval_text">get_interval_text</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.get_number_of_days" href="#trading_bot_common.data_loader.get_number_of_days">get_number_of_days</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.load_data_multimonth" href="#trading_bot_common.data_loader.load_data_multimonth">load_data_multimonth</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.rescale_dataframe" href="#trading_bot_common.data_loader.rescale_dataframe">rescale_dataframe</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.rescale_dataframe_ohlc" href="#trading_bot_common.data_loader.rescale_dataframe_ohlc">rescale_dataframe_ohlc</a></code></li>
 <li><code><a title="trading_bot_common.data_loader.retry_call" href="#trading_bot_common.data_loader.retry_call">retry_call</a></code></li>
@@ -178,6 +221,13 @@
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="trading_bot_common.data_loader.DataDownloader" href="#trading_bot_common.data_loader.DataDownloader">DataDownloader</a></code></h4>
+<ul class="">
+<li><code><a title="trading_bot_common.data_loader.DataDownloader.download_data" href="#trading_bot_common.data_loader.DataDownloader.download_data">download_data</a></code></li>
+<li><code><a title="trading_bot_common.data_loader.DataDownloader.set_config" href="#trading_bot_common.data_loader.DataDownloader.set_config">set_config</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="trading_bot_common.data_loader.DataLoader" href="#trading_bot_common.data_loader.DataLoader">DataLoader</a></code></h4>
 <ul class="">
