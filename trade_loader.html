@@ -75,29 +75,29 @@
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="trading_bot_common.trade_loader.TradeLoader.load_trades"><code class="name flex">
-<span>def <span class="ident">load_trades</span></span>(<span>self, config: Dict) ‑> pandas.core.frame.DataFrame</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="trading_bot_common.trade_loader.TradeLoader.load_trades_from_db"><code class="name flex">
-<span>def <span class="ident">load_trades_from_db</span></span>(<span>self, config: Dict) ‑> Dict[str, Dict[str, pandas.core.frame.DataFrame]]</span>
+<dt id="trading_bot_common.trade_loader.TradeLoader.load_from_db"><code class="name flex">
+<span>def <span class="ident">load_from_db</span></span>(<span>self, config: Dict) ‑> Dict[str, Dict[str, pandas.core.frame.DataFrame]]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Load raw data from database.</p></div>
 </dd>
-<dt id="trading_bot_common.trade_loader.TradeLoader.save_trades"><code class="name flex">
-<span>def <span class="ident">save_trades</span></span>(<span>self, trades: pandas.core.frame.DataFrame, config: Dict)</span>
+<dt id="trading_bot_common.trade_loader.TradeLoader.load_from_file"><code class="name flex">
+<span>def <span class="ident">load_from_file</span></span>(<span>self, config: Dict) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Save trades to file.</p></div>
+<div class="desc"></div>
 </dd>
-<dt id="trading_bot_common.trade_loader.TradeLoader.save_trades_to_db"><code class="name flex">
-<span>def <span class="ident">save_trades_to_db</span></span>(<span>self, df: pandas.core.frame.DataFrame, config: Dict)</span>
+<dt id="trading_bot_common.trade_loader.TradeLoader.save_to_db"><code class="name flex">
+<span>def <span class="ident">save_to_db</span></span>(<span>self, df: pandas.core.frame.DataFrame, config: Dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Save raw data to database.</p></div>
+</dd>
+<dt id="trading_bot_common.trade_loader.TradeLoader.save_to_file"><code class="name flex">
+<span>def <span class="ident">save_to_file</span></span>(<span>self, trades: pandas.core.frame.DataFrame, config: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save trades to file.</p></div>
 </dd>
 </dl>
 </dd>
@@ -129,10 +129,10 @@
 <ul class="">
 <li><code><a title="trading_bot_common.trade_loader.TradeLoader.POSTGRE_CREATE_QUERY" href="#trading_bot_common.trade_loader.TradeLoader.POSTGRE_CREATE_QUERY">POSTGRE_CREATE_QUERY</a></code></li>
 <li><code><a title="trading_bot_common.trade_loader.TradeLoader.create_table" href="#trading_bot_common.trade_loader.TradeLoader.create_table">create_table</a></code></li>
-<li><code><a title="trading_bot_common.trade_loader.TradeLoader.load_trades" href="#trading_bot_common.trade_loader.TradeLoader.load_trades">load_trades</a></code></li>
-<li><code><a title="trading_bot_common.trade_loader.TradeLoader.load_trades_from_db" href="#trading_bot_common.trade_loader.TradeLoader.load_trades_from_db">load_trades_from_db</a></code></li>
-<li><code><a title="trading_bot_common.trade_loader.TradeLoader.save_trades" href="#trading_bot_common.trade_loader.TradeLoader.save_trades">save_trades</a></code></li>
-<li><code><a title="trading_bot_common.trade_loader.TradeLoader.save_trades_to_db" href="#trading_bot_common.trade_loader.TradeLoader.save_trades_to_db">save_trades_to_db</a></code></li>
+<li><code><a title="trading_bot_common.trade_loader.TradeLoader.load_from_db" href="#trading_bot_common.trade_loader.TradeLoader.load_from_db">load_from_db</a></code></li>
+<li><code><a title="trading_bot_common.trade_loader.TradeLoader.load_from_file" href="#trading_bot_common.trade_loader.TradeLoader.load_from_file">load_from_file</a></code></li>
+<li><code><a title="trading_bot_common.trade_loader.TradeLoader.save_to_db" href="#trading_bot_common.trade_loader.TradeLoader.save_to_db">save_to_db</a></code></li>
+<li><code><a title="trading_bot_common.trade_loader.TradeLoader.save_to_file" href="#trading_bot_common.trade_loader.TradeLoader.save_to_file">save_to_file</a></code></li>
 </ul>
 </li>
 </ul>
