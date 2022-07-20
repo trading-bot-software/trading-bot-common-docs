@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>trading_bot_common API documentation</title>
+<title>trading_bot_common.data API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,46 +19,26 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>trading_bot_common</code></h1>
+<h1 class="title">Module <code>trading_bot_common.data</code></h1>
 </header>
 <section id="section-intro">
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="trading_bot_common.config_loader" href="config_loader.html">trading_bot_common.config_loader</a></code></dt>
-<dd>
-<div class="desc"><p>Read and load config from json file or database.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.data" href="data/index.html">trading_bot_common.data</a></code></dt>
+<dt><code class="name"><a title="trading_bot_common.data.data_downloader" href="data_downloader.html">trading_bot_common.data.data_downloader</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="trading_bot_common.database" href="database.html">trading_bot_common.database</a></code></dt>
+<dt><code class="name"><a title="trading_bot_common.data.data_loader" href="data_loader.html">trading_bot_common.data.data_loader</a></code></dt>
 <dd>
-<div class="desc"><p>Read/Write data to file or database.</p></div>
+<div class="desc"><p>Read and load data from csv file or database.</p></div>
 </dd>
-<dt><code class="name"><a title="trading_bot_common.logger" href="logger.html">trading_bot_common.logger</a></code></dt>
-<dd>
-<div class="desc"><p>Used to log messages to stdout, file, redis and telegram.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.model" href="model/index.html">trading_bot_common.model</a></code></dt>
-<dd>
-<div class="desc"><p>Model classes for bot containing data schemas.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.ohlc_actions" href="ohlc_actions.html">trading_bot_common.ohlc_actions</a></code></dt>
-<dd>
-<div class="desc"><p>Actions used in backtesting. Contains wallet checking and order execution.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.redis_connection" href="redis_connection.html">trading_bot_common.redis_connection</a></code></dt>
-<dd>
-<div class="desc"><p>Used to synchronize the bot with api.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.strategy" href="strategy/index.html">trading_bot_common.strategy</a></code></dt>
+<dt><code class="name"><a title="trading_bot_common.data.ohlc_data_loader" href="ohlc_data_loader.html">trading_bot_common.data.ohlc_data_loader</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="trading_bot_common.trade_loader" href="trade_loader.html">trading_bot_common.trade_loader</a></code></dt>
+<dt><code class="name"><a title="trading_bot_common.data.options_data_loader" href="options_data_loader.html">trading_bot_common.data.options_data_loader</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -77,17 +57,17 @@
 <ul></ul>
 </div>
 <ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="trading_bot_common" href="../index.html">trading_bot_common</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="trading_bot_common.config_loader" href="config_loader.html">trading_bot_common.config_loader</a></code></li>
-<li><code><a title="trading_bot_common.data" href="data/index.html">trading_bot_common.data</a></code></li>
-<li><code><a title="trading_bot_common.database" href="database.html">trading_bot_common.database</a></code></li>
-<li><code><a title="trading_bot_common.logger" href="logger.html">trading_bot_common.logger</a></code></li>
-<li><code><a title="trading_bot_common.model" href="model/index.html">trading_bot_common.model</a></code></li>
-<li><code><a title="trading_bot_common.ohlc_actions" href="ohlc_actions.html">trading_bot_common.ohlc_actions</a></code></li>
-<li><code><a title="trading_bot_common.redis_connection" href="redis_connection.html">trading_bot_common.redis_connection</a></code></li>
-<li><code><a title="trading_bot_common.strategy" href="strategy/index.html">trading_bot_common.strategy</a></code></li>
-<li><code><a title="trading_bot_common.trade_loader" href="trade_loader.html">trading_bot_common.trade_loader</a></code></li>
+<li><code><a title="trading_bot_common.data.data_downloader" href="data_downloader.html">trading_bot_common.data.data_downloader</a></code></li>
+<li><code><a title="trading_bot_common.data.data_loader" href="data_loader.html">trading_bot_common.data.data_loader</a></code></li>
+<li><code><a title="trading_bot_common.data.ohlc_data_loader" href="ohlc_data_loader.html">trading_bot_common.data.ohlc_data_loader</a></code></li>
+<li><code><a title="trading_bot_common.data.options_data_loader" href="options_data_loader.html">trading_bot_common.data.options_data_loader</a></code></li>
 </ul>
 </li>
 </ul>

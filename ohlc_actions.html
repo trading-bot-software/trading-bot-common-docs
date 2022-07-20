@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>trading_bot_common API documentation</title>
-<meta name="description" content="" />
+<title>trading_bot_common.ohlc_actions API documentation</title>
+<meta name="description" content="Actions used in backtesting. Contains wallet checking and order execution." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,56 +19,91 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>trading_bot_common</code></h1>
+<h1 class="title">Module <code>trading_bot_common.ohlc_actions</code></h1>
 </header>
 <section id="section-intro">
+<p>Actions used in backtesting. Contains wallet checking and order execution.</p>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="trading_bot_common.config_loader" href="config_loader.html">trading_bot_common.config_loader</a></code></dt>
-<dd>
-<div class="desc"><p>Read and load config from json file or database.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.data" href="data/index.html">trading_bot_common.data</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.database" href="database.html">trading_bot_common.database</a></code></dt>
-<dd>
-<div class="desc"><p>Read/Write data to file or database.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.logger" href="logger.html">trading_bot_common.logger</a></code></dt>
-<dd>
-<div class="desc"><p>Used to log messages to stdout, file, redis and telegram.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.model" href="model/index.html">trading_bot_common.model</a></code></dt>
-<dd>
-<div class="desc"><p>Model classes for bot containing data schemas.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.ohlc_actions" href="ohlc_actions.html">trading_bot_common.ohlc_actions</a></code></dt>
-<dd>
-<div class="desc"><p>Actions used in backtesting. Contains wallet checking and order execution.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.redis_connection" href="redis_connection.html">trading_bot_common.redis_connection</a></code></dt>
-<dd>
-<div class="desc"><p>Used to synchronize the bot with api.</p></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.strategy" href="strategy/index.html">trading_bot_common.strategy</a></code></dt>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions"><code class="flex name class">
+<span>class <span class="ident">OHLCActions</span></span>
+<span>(</span><span>config: Dict)</span>
+</code></dt>
 <dd>
 <div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="trading_bot_common.trade_loader" href="trade_loader.html">trading_bot_common.trade_loader</a></code></dt>
+<h3>Methods</h3>
+<dl>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.cancel_orders"><code class="name flex">
+<span>def <span class="ident">cancel_orders</span></span>(<span>self, row, orders)</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Cancel all open orders for a pair.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.get_ballance"><code class="name flex">
+<span>def <span class="ident">get_ballance</span></span>(<span>self, expected_wallet: float = 0) ‑> Dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get ballance of used, free and total.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.get_fee"><code class="name flex">
+<span>def <span class="ident">get_fee</span></span>(<span>self, row)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get fee for a pair. Used when buying and selling.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.get_open_orders"><code class="name flex">
+<span>def <span class="ident">get_open_orders</span></span>(<span>self, row) ‑> List[object]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get open orders for a pair.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.set_combo_order"><code class="name flex">
+<span>def <span class="ident">set_combo_order</span></span>(<span>self, trade: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set a combo order.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.set_limit_order"><code class="name flex">
+<span>def <span class="ident">set_limit_order</span></span>(<span>self, trade: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set a limit order.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.set_market_order"><code class="name flex">
+<span>def <span class="ident">set_market_order</span></span>(<span>self, trade: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set a market order.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.set_oco_limit_order"><code class="name flex">
+<span>def <span class="ident">set_oco_limit_order</span></span>(<span>self, trade: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set an OCO limit order.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.set_stop_limit_order"><code class="name flex">
+<span>def <span class="ident">set_stop_limit_order</span></span>(<span>self, trade: Dict) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set a stop limit order.</p></div>
+</dd>
+<dt id="trading_bot_common.ohlc_actions.OHLCActions.update_trade"><code class="name flex">
+<span>def <span class="ident">update_trade</span></span>(<span>self, trade)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Update a trade.</p></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -77,17 +112,28 @@
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li><code><a title="trading_bot_common.config_loader" href="config_loader.html">trading_bot_common.config_loader</a></code></li>
-<li><code><a title="trading_bot_common.data" href="data/index.html">trading_bot_common.data</a></code></li>
-<li><code><a title="trading_bot_common.database" href="database.html">trading_bot_common.database</a></code></li>
-<li><code><a title="trading_bot_common.logger" href="logger.html">trading_bot_common.logger</a></code></li>
-<li><code><a title="trading_bot_common.model" href="model/index.html">trading_bot_common.model</a></code></li>
-<li><code><a title="trading_bot_common.ohlc_actions" href="ohlc_actions.html">trading_bot_common.ohlc_actions</a></code></li>
-<li><code><a title="trading_bot_common.redis_connection" href="redis_connection.html">trading_bot_common.redis_connection</a></code></li>
-<li><code><a title="trading_bot_common.strategy" href="strategy/index.html">trading_bot_common.strategy</a></code></li>
-<li><code><a title="trading_bot_common.trade_loader" href="trade_loader.html">trading_bot_common.trade_loader</a></code></li>
+<li><code><a title="trading_bot_common" href="index.html">trading_bot_common</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="trading_bot_common.ohlc_actions.OHLCActions" href="#trading_bot_common.ohlc_actions.OHLCActions">OHLCActions</a></code></h4>
+<ul class="">
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.cancel_orders" href="#trading_bot_common.ohlc_actions.OHLCActions.cancel_orders">cancel_orders</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.get_ballance" href="#trading_bot_common.ohlc_actions.OHLCActions.get_ballance">get_ballance</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.get_fee" href="#trading_bot_common.ohlc_actions.OHLCActions.get_fee">get_fee</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.get_open_orders" href="#trading_bot_common.ohlc_actions.OHLCActions.get_open_orders">get_open_orders</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.set_combo_order" href="#trading_bot_common.ohlc_actions.OHLCActions.set_combo_order">set_combo_order</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.set_limit_order" href="#trading_bot_common.ohlc_actions.OHLCActions.set_limit_order">set_limit_order</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.set_market_order" href="#trading_bot_common.ohlc_actions.OHLCActions.set_market_order">set_market_order</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.set_oco_limit_order" href="#trading_bot_common.ohlc_actions.OHLCActions.set_oco_limit_order">set_oco_limit_order</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.set_stop_limit_order" href="#trading_bot_common.ohlc_actions.OHLCActions.set_stop_limit_order">set_stop_limit_order</a></code></li>
+<li><code><a title="trading_bot_common.ohlc_actions.OHLCActions.update_trade" href="#trading_bot_common.ohlc_actions.OHLCActions.update_trade">update_trade</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
