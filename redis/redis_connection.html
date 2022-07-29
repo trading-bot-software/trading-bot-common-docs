@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>trading_bot_common.data.data_downloader API documentation</title>
-<meta name="description" content="" />
+<title>trading_bot_common.redis.redis_connection API documentation</title>
+<meta name="description" content="Used to synchronize the bot with api." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,33 +19,72 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>trading_bot_common.data.data_downloader</code></h1>
+<h1 class="title">Module <code>trading_bot_common.redis.redis_connection</code></h1>
 </header>
 <section id="section-intro">
+<p>Used to synchronize the bot with api.</p>
 </section>
 <section>
 </section>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="trading_bot_common.redis.redis_connection.get_redis_connection_from_env"><code class="name flex">
+<span>def <span class="ident">get_redis_connection_from_env</span></span>(<span>bot_id: str, redis_host_env: str = 'REDIS_HOST')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the redis connection from the environment var.</p></div>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="trading_bot_common.data.data_downloader.DataDownloader"><code class="flex name class">
-<span>class <span class="ident">DataDownloader</span></span>
-<span>(</span><span>config: Dict, logger: <a title="trading_bot_common.logger.Logger" href="../logger.html#trading_bot_common.logger.Logger">Logger</a>, data_loader: <a title="trading_bot_common.data.data_loader.DataLoader" href="data_loader.html#trading_bot_common.data.data_loader.DataLoader">DataLoader</a>)</span>
+<dt id="trading_bot_common.redis.redis_connection.RedisConnection"><code class="flex name class">
+<span>class <span class="ident">RedisConnection</span></span>
+<span>(</span><span>redis_host: str, bot_id: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Scrape data interface.</p>
-<p>Can be extended. Extend the download_data function.</p></div>
+<div class="desc"><p>Used to synchronize the bot with api.</p></div>
 <h3>Methods</h3>
 <dl>
-<dt id="trading_bot_common.data.data_downloader.DataDownloader.download_data"><code class="name flex">
-<span>def <span class="ident">download_data</span></span>(<span>self) ‑> int</span>
+<dt id="trading_bot_common.redis.redis_connection.RedisConnection.get"><code class="name flex">
+<span>async def <span class="ident">get</span></span>(<span>self, key: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Download data.</p></div>
+<div class="desc"><p>Gets the value of the given key.</p></div>
+</dd>
+<dt id="trading_bot_common.redis.redis_connection.RedisConnection.get_message"><code class="name flex">
+<span>async def <span class="ident">get_message</span></span>(<span>self, timeout: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the next message from the redis channel.</p></div>
+</dd>
+<dt id="trading_bot_common.redis.redis_connection.RedisConnection.publish"><code class="name flex">
+<span>async def <span class="ident">publish</span></span>(<span>self, channel: str, value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Notifies the listeners that something has changed.</p></div>
+</dd>
+<dt id="trading_bot_common.redis.redis_connection.RedisConnection.set"><code class="name flex">
+<span>async def <span class="ident">set</span></span>(<span>self, key: str, value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets the value of the given key.</p></div>
+</dd>
+<dt id="trading_bot_common.redis.redis_connection.RedisConnection.subscribe"><code class="name flex">
+<span>async def <span class="ident">subscribe</span></span>(<span>self, channel: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Subscribes to the redis channel.</p></div>
+</dd>
+<dt id="trading_bot_common.redis.redis_connection.RedisConnection.time_until_next_minute"><code class="name flex">
+<span>def <span class="ident">time_until_next_minute</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the time until the next minute.</p></div>
 </dd>
 </dl>
 </dd>
@@ -60,15 +99,25 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="trading_bot_common.data" href="index.html">trading_bot_common.data</a></code></li>
+<li><code><a title="trading_bot_common.redis" href="index.html">trading_bot_common.redis</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="trading_bot_common.redis.redis_connection.get_redis_connection_from_env" href="#trading_bot_common.redis.redis_connection.get_redis_connection_from_env">get_redis_connection_from_env</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="trading_bot_common.data.data_downloader.DataDownloader" href="#trading_bot_common.data.data_downloader.DataDownloader">DataDownloader</a></code></h4>
+<h4><code><a title="trading_bot_common.redis.redis_connection.RedisConnection" href="#trading_bot_common.redis.redis_connection.RedisConnection">RedisConnection</a></code></h4>
 <ul class="">
-<li><code><a title="trading_bot_common.data.data_downloader.DataDownloader.download_data" href="#trading_bot_common.data.data_downloader.DataDownloader.download_data">download_data</a></code></li>
+<li><code><a title="trading_bot_common.redis.redis_connection.RedisConnection.get" href="#trading_bot_common.redis.redis_connection.RedisConnection.get">get</a></code></li>
+<li><code><a title="trading_bot_common.redis.redis_connection.RedisConnection.get_message" href="#trading_bot_common.redis.redis_connection.RedisConnection.get_message">get_message</a></code></li>
+<li><code><a title="trading_bot_common.redis.redis_connection.RedisConnection.publish" href="#trading_bot_common.redis.redis_connection.RedisConnection.publish">publish</a></code></li>
+<li><code><a title="trading_bot_common.redis.redis_connection.RedisConnection.set" href="#trading_bot_common.redis.redis_connection.RedisConnection.set">set</a></code></li>
+<li><code><a title="trading_bot_common.redis.redis_connection.RedisConnection.subscribe" href="#trading_bot_common.redis.redis_connection.RedisConnection.subscribe">subscribe</a></code></li>
+<li><code><a title="trading_bot_common.redis.redis_connection.RedisConnection.time_until_next_minute" href="#trading_bot_common.redis.redis_connection.RedisConnection.time_until_next_minute">time_until_next_minute</a></code></li>
 </ul>
 </li>
 </ul>
