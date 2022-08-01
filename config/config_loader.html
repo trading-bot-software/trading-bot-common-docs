@@ -54,11 +54,22 @@
 <dd>
 <div class="desc"><p>Used to store the config in database and file.</p>
 <p>Variables that can be extended:</p>
-<p>_get_table: set a unique table name</p>
-<p>_postgres_create_query: set a create query based on names and types your plugin uses.</p>
+<p>table_name: set a unique table name</p>
+<p>create_query: set a create query based on names and types your plugin uses.</p>
 <p>If you do extend this class, you can/should create also ConfigNames and ConfigTypes.
 Also, you can/should define objects that you want long lived in the constructor.
 This object, the config loader, gets loaded once and never gets destroyed.</p></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="trading_bot_common.config.config_loader.ConfigLoader.create_query"><code class="name">var <span class="ident">create_query</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="trading_bot_common.config.config_loader.ConfigLoader.table_name"><code class="name">var <span class="ident">table_name</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="trading_bot_common.config.config_loader.ConfigLoader.create_table"><code class="name flex">
@@ -130,6 +141,7 @@ This object, the config loader, gets loaded once and never gets destroyed.</p></
 <li>
 <h4><code><a title="trading_bot_common.config.config_loader.ConfigLoader" href="#trading_bot_common.config.config_loader.ConfigLoader">ConfigLoader</a></code></h4>
 <ul class="two-column">
+<li><code><a title="trading_bot_common.config.config_loader.ConfigLoader.create_query" href="#trading_bot_common.config.config_loader.ConfigLoader.create_query">create_query</a></code></li>
 <li><code><a title="trading_bot_common.config.config_loader.ConfigLoader.create_table" href="#trading_bot_common.config.config_loader.ConfigLoader.create_table">create_table</a></code></li>
 <li><code><a title="trading_bot_common.config.config_loader.ConfigLoader.insert_empty" href="#trading_bot_common.config.config_loader.ConfigLoader.insert_empty">insert_empty</a></code></li>
 <li><code><a title="trading_bot_common.config.config_loader.ConfigLoader.load_from_db" href="#trading_bot_common.config.config_loader.ConfigLoader.load_from_db">load_from_db</a></code></li>
@@ -137,6 +149,7 @@ This object, the config loader, gets loaded once and never gets destroyed.</p></
 <li><code><a title="trading_bot_common.config.config_loader.ConfigLoader.save_to_db" href="#trading_bot_common.config.config_loader.ConfigLoader.save_to_db">save_to_db</a></code></li>
 <li><code><a title="trading_bot_common.config.config_loader.ConfigLoader.save_to_db_all" href="#trading_bot_common.config.config_loader.ConfigLoader.save_to_db_all">save_to_db_all</a></code></li>
 <li><code><a title="trading_bot_common.config.config_loader.ConfigLoader.save_to_file" href="#trading_bot_common.config.config_loader.ConfigLoader.save_to_file">save_to_file</a></code></li>
+<li><code><a title="trading_bot_common.config.config_loader.ConfigLoader.table_name" href="#trading_bot_common.config.config_loader.ConfigLoader.table_name">table_name</a></code></li>
 </ul>
 </li>
 </ul>

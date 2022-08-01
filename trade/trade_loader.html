@@ -66,12 +66,23 @@
 <dd>
 <div class="desc"><p>Read and load trades from csv file or database.</p>
 <p>Can be extended by custom function.</p>
-<p>_get_table: Unique table name.</p>
-<p>_create_query: Postgres query with all names and types you will want to use.</p></div>
+<p>table_name: Unique table name.</p>
+<p>create_query: Postgres query with all names and types you will want to use.</p></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="trading_bot_common.trade.trade_loader.TradeLoader.create_query"><code class="name">var <span class="ident">create_query</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="trading_bot_common.trade.trade_loader.TradeLoader.table_name"><code class="name">var <span class="ident">table_name</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="trading_bot_common.trade.trade_loader.TradeLoader.create_table"><code class="name flex">
-<span>def <span class="ident">create_table</span></span>(<span>self, config: Dict)</span>
+<span>def <span class="ident">create_table</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -135,12 +146,14 @@
 <li>
 <h4><code><a title="trading_bot_common.trade.trade_loader.TradeLoader" href="#trading_bot_common.trade.trade_loader.TradeLoader">TradeLoader</a></code></h4>
 <ul class="two-column">
+<li><code><a title="trading_bot_common.trade.trade_loader.TradeLoader.create_query" href="#trading_bot_common.trade.trade_loader.TradeLoader.create_query">create_query</a></code></li>
 <li><code><a title="trading_bot_common.trade.trade_loader.TradeLoader.create_table" href="#trading_bot_common.trade.trade_loader.TradeLoader.create_table">create_table</a></code></li>
 <li><code><a title="trading_bot_common.trade.trade_loader.TradeLoader.get_date_rows" href="#trading_bot_common.trade.trade_loader.TradeLoader.get_date_rows">get_date_rows</a></code></li>
 <li><code><a title="trading_bot_common.trade.trade_loader.TradeLoader.load_from_db" href="#trading_bot_common.trade.trade_loader.TradeLoader.load_from_db">load_from_db</a></code></li>
 <li><code><a title="trading_bot_common.trade.trade_loader.TradeLoader.load_from_file" href="#trading_bot_common.trade.trade_loader.TradeLoader.load_from_file">load_from_file</a></code></li>
 <li><code><a title="trading_bot_common.trade.trade_loader.TradeLoader.save_to_db" href="#trading_bot_common.trade.trade_loader.TradeLoader.save_to_db">save_to_db</a></code></li>
 <li><code><a title="trading_bot_common.trade.trade_loader.TradeLoader.save_to_file" href="#trading_bot_common.trade.trade_loader.TradeLoader.save_to_file">save_to_file</a></code></li>
+<li><code><a title="trading_bot_common.trade.trade_loader.TradeLoader.table_name" href="#trading_bot_common.trade.trade_loader.TradeLoader.table_name">table_name</a></code></li>
 </ul>
 </li>
 </ul>
