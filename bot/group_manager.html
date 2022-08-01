@@ -43,7 +43,7 @@
 <dl>
 <dt id="trading_bot_common.bot.group_manager.GroupManager"><code class="flex name class">
 <span>class <span class="ident">GroupManager</span></span>
-<span>(</span><span>bot_group: str, redis_host: str, database: <a title="trading_bot_common.database.Database" href="../database.html#trading_bot_common.database.Database">Database</a>, config_class: str = 'trading_bot_common.config.Config', trade_class: str = 'trading_bot_common.trade.Trade', data_class: str = 'trading_bot_common.data.Data')</span>
+<span>(</span><span>bot_group: str, redis_host: str, database: <a title="trading_bot_common.database.Database" href="../database.html#trading_bot_common.database.Database">Database</a>, config_loader_class: str = 'trading_bot_common.config.ConfigLoader', trade_actions_class: str = 'trading_bot_common.trade.TradeActions', trade_loader_class: str = 'trading_bot_common.trade.TradeLoader', trade_processor_class: str = 'trading_bot_common.trade.TradeProcessor', data_loader_class: str = 'trading_bot_common.data.DataLoader', data_downloader_class: str = 'trading_bot_common.data.DataDownloader', data_processor_class: str = 'trading_bot_common.data.DataProcessor')</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Bot runner that performs trades and collects data and mantains state of multiple bots.</p></div>
