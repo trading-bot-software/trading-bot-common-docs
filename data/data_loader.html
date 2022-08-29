@@ -42,7 +42,8 @@
 <p>Can be extended.</p>
 <p>table_name: extend with unique table name.</p>
 <p>create_query: extend with create_query that reflects the schema of database you want to use.</p>
-<p>date_rows: return array of all columns that will contain date objects.</p></div>
+<p>date_rows: return array of all columns that will contain date objects.</p>
+<p>get_data_id: returns id of data. Has to be unique.</p></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="trading_bot_common.data.data_loader.DataLoader.create_query"><code class="name">var <span class="ident">create_query</span></code></dt>
@@ -62,6 +63,12 @@
 <dl>
 <dt id="trading_bot_common.data.data_loader.DataLoader.create_table"><code class="name flex">
 <span>def <span class="ident">create_table</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="trading_bot_common.data.data_loader.DataLoader.get_data_id"><code class="name flex">
+<span>def <span class="ident">get_data_id</span></span>(<span>self, row)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -126,6 +133,7 @@
 <li><code><a title="trading_bot_common.data.data_loader.DataLoader.create_query" href="#trading_bot_common.data.data_loader.DataLoader.create_query">create_query</a></code></li>
 <li><code><a title="trading_bot_common.data.data_loader.DataLoader.create_table" href="#trading_bot_common.data.data_loader.DataLoader.create_table">create_table</a></code></li>
 <li><code><a title="trading_bot_common.data.data_loader.DataLoader.date_rows" href="#trading_bot_common.data.data_loader.DataLoader.date_rows">date_rows</a></code></li>
+<li><code><a title="trading_bot_common.data.data_loader.DataLoader.get_data_id" href="#trading_bot_common.data.data_loader.DataLoader.get_data_id">get_data_id</a></code></li>
 <li><code><a title="trading_bot_common.data.data_loader.DataLoader.load_computed_data" href="#trading_bot_common.data.data_loader.DataLoader.load_computed_data">load_computed_data</a></code></li>
 <li><code><a title="trading_bot_common.data.data_loader.DataLoader.load_raw_data" href="#trading_bot_common.data.data_loader.DataLoader.load_raw_data">load_raw_data</a></code></li>
 <li><code><a title="trading_bot_common.data.data_loader.DataLoader.load_raw_data_from_db" href="#trading_bot_common.data.data_loader.DataLoader.load_raw_data_from_db">load_raw_data_from_db</a></code></li>
