@@ -44,6 +44,12 @@
 <p>process_signals: Extend with custom function that processes data before the strategy does so.</p></div>
 <h3>Methods</h3>
 <dl>
+<dt id="trading_bot_common.data.data_processor.DataProcessor.create_table"><code class="name flex">
+<span>def <span class="ident">create_table</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="trading_bot_common.data.data_processor.DataProcessor.process_data"><code class="name flex">
 <span>def <span class="ident">process_data</span></span>(<span>self, df: pandas.core.frame.DataFrame, timeframe: str)</span>
 </code></dt>
@@ -57,6 +63,18 @@
 <dd>
 <div class="desc"><p>Processes the indicators and returns the dataframe with the signals.</p>
 <p>Can be extended with custom function.</p></div>
+</dd>
+<dt id="trading_bot_common.data.data_processor.DataProcessor.save_computed_data"><code class="name flex">
+<span>def <span class="ident">save_computed_data</span></span>(<span>self, pair: str, timeframe: str, df: pandas.core.frame.DataFrame, config: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save computed data to file.</p></div>
+</dd>
+<dt id="trading_bot_common.data.data_processor.DataProcessor.save_computed_data_to_db"><code class="name flex">
+<span>def <span class="ident">save_computed_data_to_db</span></span>(<span>self, pair: str, timeframe: str, df: pandas.core.frame.DataFrame, config: Dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save computed data to database.</p></div>
 </dd>
 </dl>
 </dd>
@@ -79,8 +97,11 @@
 <li>
 <h4><code><a title="trading_bot_common.data.data_processor.DataProcessor" href="#trading_bot_common.data.data_processor.DataProcessor">DataProcessor</a></code></h4>
 <ul class="">
+<li><code><a title="trading_bot_common.data.data_processor.DataProcessor.create_table" href="#trading_bot_common.data.data_processor.DataProcessor.create_table">create_table</a></code></li>
 <li><code><a title="trading_bot_common.data.data_processor.DataProcessor.process_data" href="#trading_bot_common.data.data_processor.DataProcessor.process_data">process_data</a></code></li>
 <li><code><a title="trading_bot_common.data.data_processor.DataProcessor.process_signals" href="#trading_bot_common.data.data_processor.DataProcessor.process_signals">process_signals</a></code></li>
+<li><code><a title="trading_bot_common.data.data_processor.DataProcessor.save_computed_data" href="#trading_bot_common.data.data_processor.DataProcessor.save_computed_data">save_computed_data</a></code></li>
+<li><code><a title="trading_bot_common.data.data_processor.DataProcessor.save_computed_data_to_db" href="#trading_bot_common.data.data_processor.DataProcessor.save_computed_data_to_db">save_computed_data_to_db</a></code></li>
 </ul>
 </li>
 </ul>
